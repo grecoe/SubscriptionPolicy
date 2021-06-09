@@ -1,0 +1,17 @@
+{
+    "subscriptions" : [
+
+    ],
+    "principals" : {
+        "roleDirectory" : "raw_roles",
+        "mapDirectory" : "raw_s360_map",
+        "ownerMap" : "raw_sp_owners"
+    },
+    "tagging" : {
+        "description": "Tag names must be lower case",
+        "required_tags": ["alias"],
+        "ignored" : ["cleanupservice", "DefaultResourceGroup"],
+        "delete_on_missing" : false,
+        "tagDirectory" : "tag_compliance"
+    }
+}

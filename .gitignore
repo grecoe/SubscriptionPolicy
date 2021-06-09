@@ -3,6 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Local running files
+src/principals/raw_roles/
+src/principals/raw_s360_map/
+src/principals/raw_sp_owners/
+src/principals/UnusedServicePrincipals.csv
+src/tagging/tag_compliance/
+
 # C extensions
 *.so
 
