@@ -33,6 +33,14 @@ if "tagDirectory" not in cfg.tagging:
 tagging_path = "./" + cfg.tagging["tagDirectory"] 
 PathUtils.ensure_path(tagging_path)
 
+if cfg.tagging["delete_on_missing"]:
+    answer = input("Delete on missing tags is set, continue will delete untagged groups? (Y/y)> ")
+    if answer not in ["y", "Y"]:
+        print("Quitting program...")
+        quit()
+else:
+    print("No groups will be deleted this run")
+
 for subid in cfg.subscriptions:
 
     output = {
@@ -65,6 +73,7 @@ for subid in cfg.subscriptions:
         if ignored:
             continue
 
+        flag_untagged = False
         if group["managedBy"]: 
             output["managedGroups"] += 1
         elif group["tags"]:
@@ -72,13 +81,34 @@ for subid in cfg.subscriptions:
             rg_tags = [x.lower() for x in rg_tags]
             for tag in cfg.tagging["required_tags"]:
                 if tag not in rg_tags:
-                    output["untaggedGroups"] += 1
-                    output["untagged"].append(group["name"])
+                    flag_untagged = True
                     break
         else:
+            flag_untagged = True
+
+        if flag_untagged:
             output["untaggedGroups"] += 1
             output["untagged"].append(group["name"])
+            if cfg.tagging["delete_on_missing"] is True:
+                print("Deleting ", group["name"])
+                """
+                UNCOMMENT WHEN ACTUALLY READY TO FIRE IT
+                CmdUtils.get_command_output(
+                    [
+                        "az",
+                        "group",
+                        "delete",
+                        "--name",
+                        group["name"],
+                        "--subscription",
+                        subid,
+                        "--no-wait",
+                        "--yes"       
+                    ]
+                )
+                """
 
+           
     file_path = os.path.join(tagging_path, "{}.json".format(subid))
     with open(file_path, "w") as output_file:
         output_file.writelines(json.dumps(output, indent=4))

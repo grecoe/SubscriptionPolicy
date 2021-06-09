@@ -10,7 +10,7 @@
     "tagging" : {
         "description": "Tag names must be lower case",
         "required_tags": ["alias"],
-        "ignored" : ["cleanupservice", "DefaultResourceGroup"],
+        "ignored" : ["cleanupservice", "DefaultResourceGroup","NetworkWatcherRG", "cloud-shell-storage", "VisualStudioOnline-"],
         "delete_on_missing" : false,
         "tagDirectory" : "tag_compliance"
     }
