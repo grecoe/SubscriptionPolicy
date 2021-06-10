@@ -1,5 +1,7 @@
 # Tag Compliance
 
+> NOTE: Actual group deletion is currently disabled regardless of flags sent in. Commented code starts on line 98 in check_tagging.py
+
 Tag compliance is something we are going to force upon all users in all our subs. It requires that the 'alias' tag be applied to a resource group. 
 
 This process uses the configuration.json in the root of the repo. 

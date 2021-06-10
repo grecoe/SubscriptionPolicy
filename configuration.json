@@ -10,8 +10,13 @@
     "tagging" : {
         "description": "Tag names must be lower case",
         "required_tags": ["alias"],
-        "ignored" : ["cleanupservice", "DefaultResourceGroup","NetworkWatcherRG", "cloud-shell-storage", "VisualStudioOnline-"],
+        "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "cloud-shell-storage", "visualstudioonline-", "databricks-rg-"],
         "delete_on_missing" : false,
         "tagDirectory" : "tag_compliance"
+    },
+    "compute" : {
+        "include_managed_compute" : false,
+        "stop_running" : true,
+        "computeDirectory" : "compute_status"
     }
 }

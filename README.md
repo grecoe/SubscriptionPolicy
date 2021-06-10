@@ -7,7 +7,7 @@ Code in each section is configured through the configuration.json file. Mainly, 
 ## S360 Issues
 
 ### Over Privileged Service Principals
-Go to src/principals and the ReadMe.md
+Go to src/principals -> ReadMe.md for more information
 
 This helps identify, detect owners of, and cleanup service principals that are an issue with S360. 
 
@@ -15,6 +15,11 @@ This helps identify, detect owners of, and cleanup service principals that are a
 ## General Policy Compliance
 
 ### Resource Group Tagging
-Go to src/tagging and teh Readme.md
+Go to src/tagging -> Readme.md for more information
 
 Untagged resource groups are deleted via a script run at whatever frequency the team determines. 
+
+### Compute Deallocation
+Go to src/compute -> ReadMe.md for more information
+
+Scans subscriptions for VMs and optionally deallocates running machines at whatever frequency teh team determines.

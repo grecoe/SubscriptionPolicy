@@ -32,11 +32,10 @@ PathUtils.ensure_path(map_path)
 
 # This is the CSV output collected from s360/Lens with all the
 # over priviledged principals
-warnings = S360Reader.read_file("./UnusedServicePrincipals.csv")
+warnings = S360Reader.read_file("./near_sla.csv")
 
 # With the S360 list, iterate over the subscriptions to create
 # a file for each sub. 
-print("XXX", len(cfg.subscriptions))
 count = 0
 for sub in cfg.subscriptions:
     print("Matching S360 to actual sub", sub)

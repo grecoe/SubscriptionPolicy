@@ -76,8 +76,3 @@ Instructions for the user when done:
 3. Enter a principal id in the search 
 4. On the item, select Properties > Delete
 ```
-
-To generate these owner files, just ensure that you've followed the other steps first then:
-```
-python .\map_owner.py
-```

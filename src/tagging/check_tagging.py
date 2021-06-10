@@ -66,7 +66,7 @@ for subid in cfg.subscriptions:
     for group in groups:
         ignored = False
         for ignored_name in cfg.tagging["ignored"]:
-            if group["name"].startswith(ignored_name):
+            if group["name"].lower().startswith(ignored_name):
                 output["ignoredGroups"] += 1
                 ignored = True
 
@@ -91,6 +91,10 @@ for subid in cfg.subscriptions:
             output["untagged"].append(group["name"])
             if cfg.tagging["delete_on_missing"] is True:
                 print("Deleting ", group["name"])
+                # Note: the following code will work in many instances however
+                # not in these:
+                #   RG is locked
+                #   Vault or other instance has soft delete enabled
                 """
                 UNCOMMENT WHEN ACTUALLY READY TO FIRE IT
                 CmdUtils.get_command_output(
@@ -107,9 +111,7 @@ for subid in cfg.subscriptions:
                     ]
                 )
                 """
-
            
     file_path = os.path.join(tagging_path, "{}.json".format(subid))
     with open(file_path, "w") as output_file:
         output_file.writelines(json.dumps(output, indent=4))
-    
