@@ -2,6 +2,8 @@
 
 This path to do cleanup requires that you follow each step one after the other to ensure you have the correct data.
 
+[[_TOC_]]
+
 ## 1. Get Out of SLA Service Principals
 - Go to S360 select Over privileged service principals
 - Click on the Out of SLA count column
@@ -15,7 +17,7 @@ At the root of this project, open the configuration.json file and provide the su
 
 Execute:
 ```
-python .\get_roles.py
+python .\p1_get_roles.py
 ```
 
 This will create a folder in this location from the configuration setting principals.roleDirectory with a file with all role assignments. There is one file per subscription and named [subid].json 
@@ -32,7 +34,7 @@ warnings = S360Reader.read_file("./UnusedServicePrincipals.csv")
 
 Once all done, run the command 
 ```
-python .\match_s360_to_subs.py
+python .\p2_match_s360_to_subs.py
 ```
 
 This will produce a file [subid].json in the directory noted in the configuration at principals.mapDirectory
@@ -54,7 +56,7 @@ This mapping is to ensure that we know who owns which SP which needs to have it'
 
 To generate these owner files, just ensure that you've followed the other steps first then:
 ```
-python .\map_owner.py
+python .\p3_map_owner.py
 ```
 
 ## 5. Clean up role assignments
@@ -64,10 +66,25 @@ Once a user has come back with a confirmation that the principals can be removed
 Again, this assumes that all other steps have been performed. Once you have modified the file run
 
 ```
-python .\clean_principals.py
+python .\p4_clean_principals.py
 ```
 
-When this completes (it will go fase) notify the user that you have cleaned up role assignments and they will have to delete the SP from Azure Active Directory as they are the only one with that right. 
+## 6. Mass role cleanup
+
+An alternate to step 5 is just to issue the role assignment delete on all of the ones found being owned by our groups. Run the script
+
+```
+python .\p5_collect_all_to_delete.py
+```
+
+This produces a file called killall.json, it contains a JSON list. Open that file and paste the results in teh the p4_clean_principals.py file and then execute:
+
+```
+python .\p4_clean_principals.py
+```
+
+## Post Cleanup  - User Notification
+When this completes (it will go fast) notify the user that you have cleaned up role assignments and they will have to delete the SP from Azure Active Directory as they are the only one with that right. 
 
 Instructions for the user when done:
 ```

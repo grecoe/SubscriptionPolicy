@@ -16,6 +16,8 @@ sys.path.insert(0, "..")
 from utils.config import Configuration
 from utils.cmdline import CmdUtils
 from utils.pathutils import PathUtils
+from utils.locks import AzLockUtils
+from utils.group import AzResourceGroup
 
 # Load configuration
 cfg = Configuration("../../configuration.json")
@@ -41,6 +43,10 @@ if cfg.tagging["delete_on_missing"]:
 else:
     print("No groups will be deleted this run")
 
+totalZ=0
+managedZ=0
+untaggedZ=0
+ignoredZ=0
 for subid in cfg.subscriptions:
 
     output = {
@@ -52,15 +58,7 @@ for subid in cfg.subscriptions:
     }
 
     print("Getting reource groups for", subid)
-    groups = CmdUtils.get_command_output(
-        [
-            "az", 
-            "group", 
-            "list", 
-            "--subscription", 
-            subid
-        ]
-    )
+    groups = AzResourceGroup.get_groups(subid)
 
     output["totalGroups"] = len(groups)
     for group in groups:
@@ -86,32 +84,32 @@ for subid in cfg.subscriptions:
         else:
             flag_untagged = True
 
+
         if flag_untagged:
             output["untaggedGroups"] += 1
             output["untagged"].append(group["name"])
+                
             if cfg.tagging["delete_on_missing"] is True:
                 print("Deleting ", group["name"])
-                # Note: the following code will work in many instances however
-                # not in these:
-                #   RG is locked
-                #   Vault or other instance has soft delete enabled
-                """
-                UNCOMMENT WHEN ACTUALLY READY TO FIRE IT
-                CmdUtils.get_command_output(
-                    [
-                        "az",
-                        "group",
-                        "delete",
-                        "--name",
-                        group["name"],
-                        "--subscription",
-                        subid,
-                        "--no-wait",
-                        "--yes"       
-                    ]
-                )
-                """
-           
+
+                # Get locks first
+                locks = AzLockUtils.get_group_locks(group["name"], subid)
+                if locks and len(locks):
+                    for lock in locks:
+                        lock.delete()
+
+                # Now the group - When ready
+                # AzResourceGroup.delete_group(group["name"], subid)        
+
+    totalZ += output["totalGroups"]
+    untaggedZ +=  output["untaggedGroups"] 
+    ignoredZ += output["ignoredGroups"] 
+    managedZ += output["managedGroups"]
     file_path = os.path.join(tagging_path, "{}.json".format(subid))
     with open(file_path, "w") as output_file:
         output_file.writelines(json.dumps(output, indent=4))
+
+print("Total", totalZ)
+print("Managed", managedZ)
+print("Ignored", ignoredZ)
+print("Un-Tagged", untaggedZ)

@@ -13,9 +13,9 @@ import os
 import sys
 import json
 sys.path.insert(0, "..")
-from utils.cmdline import CmdUtils
 from utils.config import Configuration
 from utils.pathutils import PathUtils
+from utils.roles import AzRolesUtils
 
 cfg = Configuration("../../configuration.json")
 
@@ -31,17 +31,8 @@ PathUtils.ensure_path(usable_path)
 
 for subid in cfg.subscriptions:
     print("Getting role assigments for", subid)
-    output = CmdUtils.get_command_output(
-        [
-            "az", 
-            "role", 
-            "assignment", 
-            "list", 
-            "--subscription", 
-            subid
-        ]
-    )
-
+    output = AzRolesUtils.get_all_roles(subid, True)
+    
     if output:
         file_path = os.path.join(usable_path, "{}.json".format(subid))
         with open(file_path, "w") as out_file:

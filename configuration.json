@@ -1,6 +1,5 @@
 {
     "subscriptions" : [
-
     ],
     "principals" : {
         "roleDirectory" : "raw_roles",
@@ -18,5 +17,8 @@
         "include_managed_compute" : false,
         "stop_running" : true,
         "computeDirectory" : "compute_status"
+    },
+    "roles" : {
+        "roleSummaryDirectory" : "role_summary"
     }
 }

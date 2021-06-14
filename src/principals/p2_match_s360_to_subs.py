@@ -32,7 +32,7 @@ PathUtils.ensure_path(map_path)
 
 # This is the CSV output collected from s360/Lens with all the
 # over priviledged principals
-warnings = S360Reader.read_file("./all.csv")
+warnings = S360Reader.read_file("./Batch3_all_really55.csv")
 
 # With the S360 list, iterate over the subscriptions to create
 # a file for each sub. 
@@ -64,9 +64,10 @@ for sub in cfg.subscriptions:
                 else:
                     owners += own["objectId"] + " "
 
-            command = "az role assignment delete --assignee {} --role '{}'".format(
+            command = "az role assignment delete --assignee {} --scope {} --role {}".format(
                 warning.principalId,
-                applied[warning.principalId].roleDefinitionName
+                applied[warning.principalId].scope,
+                applied[warning.principalId].roleDefinitionId
             )
 
             warned = {

@@ -11,6 +11,7 @@ src/principals/Batch*
 src/principals/UnusedServicePrincipals.csv
 src/tagging/tag_compliance/
 src/compute/compute_status/
+src/roles/role_summary/
 
 # C extensions
 *.so
