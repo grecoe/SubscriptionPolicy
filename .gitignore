@@ -7,7 +7,9 @@ __pycache__/
 src/principals/raw_roles/
 src/principals/raw_s360_map/
 src/principals/raw_sp_owners/
-src/principals/Batch*
+src/principals/*.csv
+src/principals/cleanupoutput.txt
+src/principals/killall.json
 src/principals/UnusedServicePrincipals.csv
 src/tagging/tag_compliance/
 src/compute/compute_status/

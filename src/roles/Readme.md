@@ -1,6 +1,6 @@
 # RBAC Roles
 
-With an influx of users given access to the AGCI AI subscriptions, all RBAC access will now occur through Azure Active Directory Subscriptions. 
+With an influx of users given access to the AGCI AI subscriptions, all RBAC access will now occur through Azure Active Directory Groups. 
 
 Each stream is allocated two groups in which to add users:
 

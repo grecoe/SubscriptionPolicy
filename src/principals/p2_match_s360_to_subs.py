@@ -32,7 +32,7 @@ PathUtils.ensure_path(map_path)
 
 # This is the CSV output collected from s360/Lens with all the
 # over priviledged principals
-warnings = S360Reader.read_file("./Batch3_all_really55.csv")
+warnings = S360Reader.read_file("./June14.csv")
 
 # With the S360 list, iterate over the subscriptions to create
 # a file for each sub. 
@@ -48,21 +48,28 @@ for sub in cfg.subscriptions:
 
             # Get the service principal
             # az ad sp owner list --id ID
-            owner = CmdUtils.get_command_output([
-                "az",
-                "ad",
-                "sp",
-                "owner",
-                "list",
-                "--id",
-                warning.principalId])
-
+            """
+            Slash and burn policy, don't care who the user is.
             owners = ""
-            for own in owner:
-                if "mail" in own:
-                    owners += own["mail"] + " "
-                else:
-                    owners += own["objectId"] + " "
+            try:
+                owner = CmdUtils.get_command_output([
+                    "az",
+                    "ad",
+                    "sp",
+                    "owner",
+                    "list",
+                    "--id",
+                    warning.principalId])
+
+                for own in owner:
+                    if "mail" in own:
+                        owners += own["mail"] + " "
+                    else:
+                        owners += own["objectId"] + " "
+            except Exception as ex:
+                print("Failed to get owner, using id")
+                onwers = "UNK_" + warning.principalId
+            """
 
             command = "az role assignment delete --assignee {} --scope {} --role {}".format(
                 warning.principalId,
@@ -74,7 +81,7 @@ for sub in cfg.subscriptions:
                 "principalId" : warning.principalId,
                 "applicationId" : warning.applicationId,
                 "principalName" : applied[warning.principalId].principalName,
-                "owner" : owners,
+                "owner" : warning.subscription,
                 "role" : applied[warning.principalId].roleDefinitionName,
                 "subscription" : warning.subscription,
                 "cleanup" : command

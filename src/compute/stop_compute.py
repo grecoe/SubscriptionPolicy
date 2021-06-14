@@ -63,8 +63,6 @@ for subid in cfg.subscriptions:
         for rvm in running_vms:
             rvm.deallocate()
 
-    break
-
 total_end = perf_counter()
 print("All processing took {}".format(total_end-total_start))
 print("Total {} running {}".format(total_computes, running_computes))

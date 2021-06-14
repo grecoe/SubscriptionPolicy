@@ -9,7 +9,10 @@ Virtual Machine deallocation is somthing we are going to force upon all users in
 This script will find all VMs accross subscriptions and determine if
 - It is in a managed group
 - It is running
-- If running, should it deallocate it
+- If running, should it deallocate it?
+    - If the configuration flag for compute.include_managed_compute is true, compute in managed resource groups are included in the run. Otherwise they are not loaded.
+    - If the configuration flage for compute.stop_running is true, any compute detected will be deallocated.  
+
 
 This process uses the configuration.json in the root of the repo. 
 
