@@ -20,14 +20,7 @@ if cfg.roles["deleteUserRoles"]:
 else:
     print("No roles will be removed")
 
-# Energy
-#subcription_id = "789908e0-5fc2-4c4d-b5f5-9764b0d602b3"
-# FSI
-#subcription_id = "1b365fe2-5882-4935-bd81-8027e0816b45"
-# Energy
-# subcription_id = "789908e0-5fc2-4c4d-b5f5-9764b0d602b3"
-# Supply Chain
-subcription_id = "6187b663-b744-4d24-8226-7e66525baf8f"
+subcription_id = "YOUR_SUBSCRIPTION_ID"
 roles = AzRolesUtils.get_sub_roles(subcription_id, False)
 
 for role in roles:
