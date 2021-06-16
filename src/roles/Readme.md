@@ -29,7 +29,7 @@ python .\scan_roles.py
 ```
 
 ### clear_user_roles.py
-You must open this script and provide a single Azure Subscription ID. 
+You must open this script and provide a single Azure Subscription ID on line 22. 
 
 The script looks for top level roles assigned to a subscription and deletes any "User" roles, this is because we are moving towards an RBAC Group access only. 
 

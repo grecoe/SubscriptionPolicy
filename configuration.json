@@ -16,10 +16,14 @@
     },
     "compute" : {
         "include_managed_compute" : false,
-        "stop_running" : true,
+        "stop_running" : false,
         "computeDirectory" : "compute_status"
     },
     "roles" : {
-        "roleSummaryDirectory" : "role_summary"
+        "roleSummaryDirectory" : "role_summary",
+        "deleteUserRoles" : false
+    },
+    "storage" : {
+        "storageSummaryDirectory" : "storage_summary"
     }
 }

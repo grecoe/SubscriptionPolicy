@@ -14,6 +14,9 @@ src/principals/UnusedServicePrincipals.csv
 src/tagging/tag_compliance/
 src/compute/compute_status/
 src/roles/role_summary/
+src/roles/role_paring/
+src/roles/validate_group_membership.py
+src/storage/storage_summary/
 
 # C extensions
 *.so

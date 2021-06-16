@@ -19,6 +19,11 @@ Go to src/tagging -> Readme.md for more information
 
 Untagged resource groups are deleted via a script run at whatever frequency the team determines. 
 
+## Storage - No public blob access.
+Go to src/storage -> Readme.md for more information
+
+Scans subscriptions for storage accounts. If an account has public blob access enabled it is disabled.
+
 ### Compute Deallocation
 Go to src/compute -> ReadMe.md for more information
 
