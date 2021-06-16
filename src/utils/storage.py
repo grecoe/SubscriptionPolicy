@@ -50,3 +50,38 @@ class AzStorageUtil:
         )
 
         CmdUtils.get_command_output(command.split(' '), False)
+
+    @staticmethod
+    def _enable_logging(connection_string, sub_id, services="bqt", logtype="rwd"):
+        command = [
+            "az", 
+            "storage", 
+            "logging", 
+            "update", 
+            "--log",
+            logtype,
+            "--retention",
+            "10",
+            "--services",
+            services,
+            "--connection-string",
+            connection_string,
+            "--subscription",
+            sub_id
+        ]
+        CmdUtils.get_command_output(command)
+
+    @staticmethod
+    def enable_logging(sub_id, storage_acc, resource_group):
+        command = "az storage account show-connection-string -g {} -n {} --subscription {}".format(
+            resource_group,
+            storage_acc,
+            sub_id
+        )
+
+        output = CmdUtils.get_command_output(command.split(" "))
+
+        if isinstance(output, dict):
+            connection_string = output["connectionString"]
+            AzStorageUtil._enable_logging(connection_string, sub_id)
+

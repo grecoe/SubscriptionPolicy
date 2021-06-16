@@ -1,5 +1,12 @@
 """
     Use this file to remove User roles from a subscription
+
+    Required settings from configuartion.json is 
+    roles["deleteUserRoles"]
+
+    If true, user roles are deleted, if false, no user roles deleted
+    
+    In either case the only output will be to the command line.
 """
 import sys
 sys.path.insert(0, "..")
@@ -25,5 +32,6 @@ roles = AzRolesUtils.get_sub_roles(subcription_id, False)
 
 for role in roles:
     if role.principalType == "User":
+        print("User Role:", role.principalName)
         if cfg.roles["deleteUserRoles"]:
             role.delete()

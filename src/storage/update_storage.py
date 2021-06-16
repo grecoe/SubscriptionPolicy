@@ -49,6 +49,8 @@ if not len(cfg.subscriptions):
     raise Exception("Update configuration.json with sub ids")
 if "storageSummaryDirectory" not in cfg.storage:
     raise Exception("Missing storageSummaryDirectory setting in storage.")
+if "forceUpdate" not in cfg.storage:
+    raise Exception("Missing forceUpdate setting in storage.")
 
 # Ensure we have the output folder
 usable_path = "./" + cfg.storage["storageSummaryDirectory"]
@@ -69,20 +71,31 @@ for subid in cfg.subscriptions:
         print("\tInspect Storage", account["name"])
 
         group_info = AzResourceGroup.get_group(subid, account["resourceGroup"])
-        blob_access_open = AzStorageUtil.is_blob_access_public(
-            subid,
-            account["name"],
-            account["resourceGroup"]
-        )
+        blob_access_open = False
+
+        if cfg.storage["forceUpdate"] == False:
+            # Only get this flag if we aren't forcing update. Faster
+            blob_access_open = AzStorageUtil.is_blob_access_public(
+                subid,
+                account["name"],
+                account["resourceGroup"]
+            )
 
         index = "managedGroupStorage" if group_info["managedBy"] is not None else "unmanagedGroupStorage"
         account_overview[index]["total"] += 1
-        if blob_access_open:
+        if blob_access_open or cfg.storage["forceUpdate"]:
+            # Eitehr open or forced, do the update
             account_overview[index]["open"] += 1
             account_overview[index]["accounts"].append(account["name"])
 
+            print("\tEnable logging")
+            AzStorageUtil.enable_logging(
+                subid,
+                account["name"],
+                account["resourceGroup"]
+            )
             # Disable public blob AND enforce https
-            print("Disable Public Blob Access")
+            print("\tUpdating blob access/https/logging")
             AzStorageUtil.disable_public_blob_access(
                 subid,
                 account["name"],
