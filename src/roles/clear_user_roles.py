@@ -20,12 +20,10 @@ if cfg.roles["deleteUserRoles"]:
 else:
     print("No roles will be removed")
 
-subcription_id = "YOUR_SUBSCRIPTION_ID"
+subcription_id = "989b90f7-da4f-41f9-84c9-44848802052d"
 roles = AzRolesUtils.get_sub_roles(subcription_id, False)
 
 for role in roles:
     if role.principalType == "User":
-        print(role.principalName)
         if cfg.roles["deleteUserRoles"]:
-            print("Delete role!")
-            #role.delete() Really making sure we don't accidentally delete during testing
+            role.delete()

@@ -25,7 +25,7 @@ class AzRole:
     def delete(self):
         command = self.get_delete_command()
         command = command.split(' ')
-        print("Deleting {} role for {}\n\t{}".format(
+        print("Deleting {} role for {}".format(
             self.principalType,
             self.principalName
         ))
