@@ -1,6 +1,5 @@
 {
     "subscriptions" : [
-
     ],
     "principals" : {
         "roleDirectory" : "raw_roles",
@@ -8,7 +7,7 @@
         "ownerMap" : "raw_sp_owners"
     },
     "tagging" : {
-        "description": "Tag names must be lower case",
+        "description": "Tag names and ignored group names must be lower case",
         "required_tags": ["alias"],
         "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "cloud-shell-storage", "visualstudioonline-", "databricks-rg-"],
         "delete_on_missing" : false,
@@ -21,6 +20,7 @@
     },
     "roles" : {
         "roleSummaryDirectory" : "role_summary",
+        "clearRolesSubId" : "SUB ID TO CLEAR USER ROLES - clear_user_roles.py",
         "deleteUserRoles" : false
     },
     "storage" : {

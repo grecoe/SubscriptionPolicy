@@ -4,9 +4,17 @@ import sys
 from time import perf_counter
 sys.path.insert(0, "..")
 from utils.config import Configuration
-from utils.cmdline import CmdUtils
 from utils.pathutils import PathUtils
-from utils.vm import Compute, ComputeUtil
+from utils.vm import ComputeUtil
+from utils.login import AzLoginUtils
+
+
+# Ensure a login and switch to SP if requested
+try:
+    AzLoginUtils.validate_login("../../credentials.json")
+except Exception as ex:
+    print(str(ex))
+    quit()
 
 # Load configuration
 cfg = Configuration("../../configuration.json")

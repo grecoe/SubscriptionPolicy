@@ -39,7 +39,15 @@ from utils.config import Configuration
 from utils.storage import AzStorageUtil
 from utils.pathutils import PathUtils
 from utils.group import AzResourceGroup
+from utils.login import AzLoginUtils
 
+
+# Ensure a login and switch to SP if requested
+try:
+    AzLoginUtils.validate_login("../../credentials.json")
+except Exception as ex:
+    print(str(ex))
+    quit()
 
 # Load configuration
 cfg = Configuration("../../configuration.json")

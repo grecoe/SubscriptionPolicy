@@ -25,9 +25,11 @@ class AzRole:
     def delete(self):
         command = self.get_delete_command()
         command = command.split(' ')
+
+        name = self.principalName if self.principalName else self.principalId 
         print("Deleting {} role for {}".format(
             self.principalType,
-            self.principalName
+            name
         ))
         CmdUtils.get_command_output(command,False)
 

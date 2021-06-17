@@ -6,6 +6,8 @@ Each stream is allocated two groups in which to add users:
 
 > AGCI[StreamName]<br>AGCI[StreamName]Guest
 
+> NOTE: Use 
+
 ## AGCI[StreamName]
 Members of CoreEng are owners of this group as well as the actual stream lead. 
 
@@ -29,7 +31,8 @@ python .\scan_roles.py
 ```
 
 ### clear_user_roles.py
-You must open this script and provide a single Azure Subscription ID on line 22. 
+You must put in a valid subscription ID in configuration.json for roles.clearRolesSubId for the subscription to be acted upon. 
 
-The script looks for top level roles assigned to a subscription and deletes any "User" roles, this is because we are moving towards an RBAC Group access only. 
+
+The script looks for top level roles assigned to a subscription and deletes any "User" roles if roles.deleteUserRoles in configuration.json is true otherwise it just dumps out what would happen. 
 

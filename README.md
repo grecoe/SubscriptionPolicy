@@ -4,6 +4,18 @@ This repo has some utilities useful for managing certain aspects of your Azure S
 
 Code in each section is configured through the configuration.json file. Mainly, you will need to ensure you add in your subscription ID's 
 
+## Login Validation
+Each process will validate that there is a valid az login in effect. This can be overridden by using the credentials.json file.
+
+The credentials.json file contains information about a service principal, i.e. 
+
+|Field|Value|
+|----|----|
+|usePrincipal|Boolean flag. If true the following fields MUST be valid. If false code will only verify there is a valid login or throw if not. |
+|application|SP ID required if usePrincipal=True|
+|credential|SP Password required if usePrincipal=True|
+|tenent|SP Tenent required if usePrincipal=True|
+
 ## S360 Issues
 
 ### Over Privileged Service Principals

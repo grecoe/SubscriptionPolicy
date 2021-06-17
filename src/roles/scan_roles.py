@@ -16,7 +16,16 @@ sys.path.insert(0, "..")
 from utils.config import Configuration
 from utils.pathutils import PathUtils
 from utils.roles import AzRolesUtils
+from utils.login import AzLoginUtils
 
+# Ensure a login and switch to SP if requested
+try:
+    AzLoginUtils.validate_login("../../credentials.json")
+except Exception as ex:
+    print(str(ex))
+    quit()
+
+# Get configuration for run
 cfg = Configuration("../../configuration.json")
 
 # Ensure we have data
@@ -47,17 +56,13 @@ for subid in cfg.subscriptions:
     for role in output:
         if role.principalType.lower() == 'user':
             users[str(unknown)] = {
-                "name" : role.principalName,
+                "name" : role.principalName if role.principalName else role.principalId,
                 "command" : role.get_delete_command()
             }
             unknown += 1
 
         if role.principalType.lower() == 'group':
-            toadd = None
-            if not role.principalName or len(role.principalName) == 0:
-                toadd = role.principalId
-            else:    
-                toadd = role.principalName
+            toadd = role.principalName if role.principalName else role.principalId
 
             if not toadd or len(toadd) == 0:
                 toadd = "Not Found"

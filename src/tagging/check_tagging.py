@@ -13,11 +13,19 @@ import os
 import json
 import sys
 sys.path.insert(0, "..")
+from utils.login import AzLoginUtils
 from utils.config import Configuration
-from utils.cmdline import CmdUtils
 from utils.pathutils import PathUtils
 from utils.locks import AzLockUtils
 from utils.group import AzResourceGroup
+
+
+# Ensure a login and switch to SP if requested
+try:
+    AzLoginUtils.validate_login("../../credentials.json")
+except Exception as ex:
+    print(str(ex))
+    quit()
 
 # Load configuration
 cfg = Configuration("../../configuration.json")
