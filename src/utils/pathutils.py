@@ -8,6 +8,15 @@ class PathUtils:
             os.makedirs(directory_path)
 
     @staticmethod 
+    def get_files_in_path(directory_path: str):
+        file_list = []
+        for root, dirs, files in os.walk(directory_path, topdown=False):
+            for name in files:
+                file_name = os.path.join(root, name)
+                file_list.append(file_name)
+        return file_list
+
+    @staticmethod 
     def load_json_files(directory_path: str):
         file_list = []
         for root, dirs, files in os.walk(directory_path, topdown=False):

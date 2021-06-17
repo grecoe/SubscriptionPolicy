@@ -16,6 +16,19 @@ class AzResourceGroup:
             ]
         )
 
+    @staticmethod
+    def group_exists(sub_id: str, group_name: str):
+        return CmdUtils.get_command_output(
+            [
+                "az", 
+                "group", 
+                "exists",
+                "--name",
+                group_name, 
+                "--subscription", 
+                sub_id
+            ]
+        )
 
     @staticmethod
     def get_groups(sub_id:str):

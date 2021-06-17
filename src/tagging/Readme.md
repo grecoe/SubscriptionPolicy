@@ -18,3 +18,14 @@ You must fill in "subscriptions" with ID's of subs you want to check. The other 
 ```
 python .\checktagging.py
 ```
+
+
+## Helper Scripts
+
+### delete_specific_groups.py
+Script you can put in specific group names and a subscription ID and just blindy delete whatever groups you want. 
+
+### verify_removed_groups.py
+After running check_tagging with a delete is true, wait some time then run this script. It will load all the files created by the check_tagging script and check to see if the groups are there or not.
+
+Groups that still remain likely mean there is some manual work to get rid of them.

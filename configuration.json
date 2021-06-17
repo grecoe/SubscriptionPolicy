@@ -20,7 +20,7 @@
     },
     "roles" : {
         "roleSummaryDirectory" : "role_summary",
-        "clearRolesSubId" : "SUB ID TO CLEAR USER ROLES - clear_user_roles.py",
+        "clearRolesSubId" : "SUB ID TO CLEAN",
         "deleteUserRoles" : false
     },
     "storage" : {
