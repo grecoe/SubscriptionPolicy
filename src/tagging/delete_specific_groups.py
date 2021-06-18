@@ -19,7 +19,7 @@ except Exception as ex:
 
 sub_id = "YOUR_SUB_ID"
 groups = [
-    "group names to delete in sub"
+        "list of groups to delete"
 ]
 
 

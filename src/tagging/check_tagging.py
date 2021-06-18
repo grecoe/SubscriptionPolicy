@@ -107,7 +107,7 @@ for subid in cfg.subscriptions:
                         lock.delete()
 
                 # Now the group - When ready
-                # AzResourceGroup.delete_group(group["name"], subid)        
+                AzResourceGroup.delete_group(group["name"], subid)        
 
     totalZ += output["totalGroups"]
     untaggedZ +=  output["untaggedGroups"] 

@@ -50,7 +50,8 @@ for sub_id in loaded_paths:
         res = AzResourceGroup.group_exists(sub_id, group_name)
         if res:
             undeleted_groups[sub_id].append(group_name)
-    break
 
-print("\n\nUndeleted ->")
-print(json.dumps(undeleted_groups, indent=4))
+print("\n\nUndeleted -> Complete")
+with open("./uncleaned.json", "w") as results_file:
+    results_file.writelines(json.dumps(undeleted_groups, indent=4))
+
