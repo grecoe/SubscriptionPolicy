@@ -41,6 +41,11 @@ Go to src/compute -> ReadMe.md for more information
 
 Scans subscriptions for VMs and optionally deallocates running machines at whatever frequency teh team determines.
 
+### Key Vault Soft Delete
+Go to src/keyvault -> ReadMe.md for more information
+
+Ensures all AKV's have soft delete enabled.
+
 ## RBAC Access
 Go to src/roles -> Readme.md for more information
 

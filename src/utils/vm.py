@@ -14,8 +14,6 @@ class Compute:
 
     def deallocate(self):
         print("Deallocating {} in sub {}".format(self.name, self.subscription))
-        """
-        UNCOMMENT WHEN READY TO ACTUALLY USE
         CmdUtils.get_command_output(
             [
                 "az",
@@ -30,7 +28,6 @@ class Compute:
                 "--no-wait"
             ]
         )
-        """
 
 class ComputeUtil:
     @staticmethod

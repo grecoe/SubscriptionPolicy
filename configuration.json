@@ -1,6 +1,6 @@
 {
     "subscriptions" : [
-        
+
     ],
     "principals" : {
         "roleDirectory" : "raw_roles",
@@ -26,6 +26,6 @@
     },
     "storage" : {
         "storageSummaryDirectory" : "storage_summary",
-        "forceUpdate" : true
+        "forceUpdate" : false
     }
 }

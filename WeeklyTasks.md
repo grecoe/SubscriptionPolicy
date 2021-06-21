@@ -18,6 +18,7 @@ Step 5 for compute is an unknown, but at least run Friday nights.
     - Ensure compute.stop_running = true (shut down VM's found)
     - Ensure compute.include_managed_compute = false (won't shut down clusters)
     - run src/compute/stop_compute.py
+1. Ensure all Azure Key Vaults have Soft Delete enabled. 
 1. Scale Down Expensive Services
     - Power BI Embed -> A2
     - Data Explorer -> Dev(No SLA)_Standard_D11_v2
