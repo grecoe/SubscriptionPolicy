@@ -69,7 +69,10 @@ for subid in cfg.subscriptions:
     if cfg.compute["stop_running"]:
         running_vms = ComputeUtil.get_running_compute(computes)
         for rvm in running_vms:
-            rvm.deallocate()
+            # Check for CoreEng special flag
+            tags = getattr(rvm, "tags", None)
+            if not tags or "coreeng" not in tags:
+                rvm.deallocate()
 
 total_end = perf_counter()
 print("All processing took {}".format(total_end-total_start))

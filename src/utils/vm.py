@@ -90,6 +90,9 @@ class ComputeUtil:
             print("Collecting VM ", vm["name"])
 
             current_comp = Compute()
+            for key in vm:
+                setattr(current_comp, key, vm[key])
+
             current_comp.name = vm["name"]
             current_comp.location = vm["location"]
             current_comp.resourceGroup = vm["resourceGroup"]
