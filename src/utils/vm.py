@@ -1,4 +1,6 @@
 import json
+import os
+from time import perf_counter
 from .cmdline import CmdUtils
 
 
@@ -68,7 +70,6 @@ class ComputeUtil:
         }
 
         return report
-
 
     @staticmethod
     def get_compute(sub_id:str, get_power_for_managed=False):
@@ -151,3 +152,41 @@ class ComputeUtil:
         )
 
         return group_state["managedBy"]
+
+    @staticmethod
+    def deallocate_vms(logging_path: str, subscriptions: list, include_managed:bool, deallocate_running:bool):
+        stats = {
+            "total" : 0,
+            "running" : 0
+        }
+
+        for subid in subscriptions:
+            start = perf_counter()
+            computes = ComputeUtil.get_compute(subid, include_managed)
+            stop = perf_counter()
+
+            print("Took {} to get {}".format(
+                stop-start,
+                len(computes)
+            ))
+
+            report = ComputeUtil.parse_compute_to_report(computes)
+            stats["total"] += report["overall"]["total"]
+            stats["running"] += report["states"]["running"]
+
+            file_name = os.path.join(logging_path, "{}.txt".format(subid))
+            with open(file_name, "w") as output_file:
+                output_file.writelines(json.dumps(report, indent=4))
+
+            # If it has a powerState then it was included managed or not. Check
+            # shutdown flag and if set, turn it off (deallocated)
+            if deallocate_running:
+                running_vms = ComputeUtil.get_running_compute(computes)
+                for rvm in running_vms:
+                    # Check for CoreEng special flag
+                    tags = getattr(rvm, "tags", None)
+                    if not tags or "coreeng" not in tags:
+                        rvm.deallocate()
+
+        return stats
+         

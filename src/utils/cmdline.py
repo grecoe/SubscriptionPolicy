@@ -1,7 +1,6 @@
 import json
 import subprocess
 
-
 class CmdUtils:
 
     @staticmethod

@@ -17,59 +17,16 @@ except Exception as ex:
     print(str(ex))
     quit()
 
-sub_id = "2eedf122-c960-4ddc-9146-ac93dbf8b2b0"
+sub_id = "Your Sub ID"
 groups = [
-        "devops-test-28735",
-        "devops-test-27548",
-        "devops-test-8686",
-        "devops-test-20434",
-        "devops-test-5708",
-        "devops-test-11361",
-        "devops-test-29141",
-        "devops-test-649",
-        "devops-test-20333",
-        "devops-test-9005",
-        "devops-test-31062",
-        "devops-test-20210",
-        "devops-test-27805",
-        "devops-test-14183",
-        "devops-test-14078",
-        "devops-test-18907",
-        "devops-test-7417",
-        "devops-test-11719",
-        "devops-test-24377",
-        "devops-test-19011",
-        "devops-test-6473",
-        "devops-test-9574",
-        "devops-test-7902",
-        "devops-test-21057",
-        "devops-test-21427",
-        "devops-test-13352",
-        "devops-test-510",
-        "devops-test-14155",
-        "devops-test-15912",
-        "devops-test-28492",
-        "devops-test-31454",
-        "devops-test-16651",
-        "devops-test-26784",
-        "devops-test-30702",
-        "devops-test-3086",
-        "devops-test-24313",
-        "devops-test-2541",
-        "devops-test-14938",
-        "devops-test-16368",
-        "devops-test-8775",
-        "devops-test-17951",
-        "devops-test-11554",
-        "devops-test-24273",
-        "devops-test-20894",
-        "devops-test-31394"
+        "list of rg's"
 ]
 
 print("Deleting {} groups from {}".format(
     len(groups),
     sub_id
 ))
+
 unfound_groups = []
 for group in groups:
     print("Delete ->", group)

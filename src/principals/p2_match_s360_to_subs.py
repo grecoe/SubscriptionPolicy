@@ -32,7 +32,7 @@ PathUtils.ensure_path(map_path)
 
 # This is the CSV output collected from s360/Lens with all the
 # over priviledged principals
-warnings = S360Reader.read_file("./June21.csv")
+warnings = S360Reader.read_file("./June22.csv")
 
 # With the S360 list, iterate over the subscriptions to create
 # a file for each sub. 
@@ -84,6 +84,7 @@ for sub in cfg.subscriptions:
                 "owner" : warning.subscription,
                 "role" : applied[warning.principalId].roleDefinitionName,
                 "subscription" : warning.subscription,
+                "id" : applied[warning.principalId].id,
                 "cleanup" : command
             }
             matches.append(warned)

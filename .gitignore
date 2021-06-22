@@ -17,6 +17,8 @@ src/roles/role_summary/
 src/roles/role_paring/
 src/roles/validate_group_membership.py
 src/storage/storage_summary/
+src/endpoints/open_endpoints/
+src/endpoints/*.tsv
 
 # C extensions
 *.so

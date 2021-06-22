@@ -44,36 +44,13 @@ usable_path = "./" + cfg.compute["computeDirectory"]
 PathUtils.ensure_path(usable_path)
 
 total_start = perf_counter()
-total_computes = 0
-running_computes = 0
-for subid in cfg.subscriptions:
-    start = perf_counter()
-    computes = ComputeUtil.get_compute(subid, cfg.compute["include_managed_compute"])
-    stop = perf_counter()
-
-    print("Took {} to get {}".format(
-        stop-start,
-        len(computes)
-    ))
-
-    report = ComputeUtil.parse_compute_to_report(computes)
-    total_computes += report["overall"]["total"]
-    running_computes += report["states"]["running"]
-
-    file_name = os.path.join(usable_path, "{}.txt".format(subid))
-    with open(file_name, "w") as output_file:
-        output_file.writelines(json.dumps(report, indent=4))
-
-    # If it has a powerState then it was included managed or not. Check
-    # shutdown flag and if set, turn it off (deallocated)
-    if cfg.compute["stop_running"]:
-        running_vms = ComputeUtil.get_running_compute(computes)
-        for rvm in running_vms:
-            # Check for CoreEng special flag
-            tags = getattr(rvm, "tags", None)
-            if not tags or "coreeng" not in tags:
-                rvm.deallocate()
-
+stats = ComputeUtil.deallocate_vms(
+            usable_path,
+            cfg.subscriptions,
+            cfg.compute["include_managed_compute"],
+            cfg.compute["stop_running"]    
+        )
 total_end = perf_counter()
+
 print("All processing took {}".format(total_end-total_start))
-print("Total {} running {}".format(total_computes, running_computes))
+print("Total {} running {}".format(stats["total"], stats["running"]))

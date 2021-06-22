@@ -1,6 +1,5 @@
 {
     "subscriptions" : [
-
     ],
     "principals" : {
         "roleDirectory" : "raw_roles",
