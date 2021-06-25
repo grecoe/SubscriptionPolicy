@@ -32,6 +32,9 @@ class Compute:
         )
 
 class ComputeUtil:
+
+    SHUT_DOWN_PASS_TAG = "hailmary"
+
     @staticmethod
     def get_running_compute(compute_list):
         return [x for x in compute_list if x.powerState == "PowerState/running"]
@@ -131,8 +134,12 @@ class ComputeUtil:
                     ]
                 )
 
-                current_comp.powerState = instance["instanceView"]["statuses"][1]["code"]
-            
+                try:
+                    current_comp.powerState = instance["instanceView"]["statuses"][1]["code"]
+                except Exception as ex:
+                    print("Failed to get power state with: ", instance["instanceView"]["statuses"])
+                    current_comp.powerState = "Unknown"
+                    
             return_computes.append(current_comp)
 
         return return_computes
@@ -185,7 +192,9 @@ class ComputeUtil:
                 for rvm in running_vms:
                     # Check for CoreEng special flag
                     tags = getattr(rvm, "tags", None)
-                    if not tags or "coreeng" not in tags:
+                    if tags and ComputeUtil.SHUT_DOWN_PASS_TAG in tags:
+                        print("{} stopped the shutdown".format(ComputeUtil.SHUT_DOWN_PASS_TAG))
+                    else:
                         rvm.deallocate()
 
         return stats

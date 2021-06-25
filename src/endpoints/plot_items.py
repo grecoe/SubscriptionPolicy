@@ -63,18 +63,29 @@ for mer in all_assets:
 
     # Local Tracking
     if mer.restype not in flagged:
-        flagged[mer.restype] = {"total": 0, "exists": 0}
+        flagged[mer.restype] = {"total": 0, "exists": 0, "duplicate" : [] }
     flagged[mer.restype]["total"] += 1
     flagged[mer.restype]["exists"] += 1 if mer.exists else 0
     # Local Tracking
 
-    breakdown[mer.subid][mer.restype].append(
-        {
-            "id": mer.id,
-            "resource": mer.resource,
-            "group": mer.resourceGroup,
-            "exists" : mer.exists
-        }
+    # Check for a duplicate
+    duplicate = [x for x in breakdown[mer.subid][mer.restype] if x["id"] == mer.id]
+    is_duplicate = False
+    if len(duplicate) > 0:
+        # Found the same ID, make sure it's in the same group
+        if duplicate[0]["group"] == mer.resourceGroup and mer.exists:
+            is_duplicate = True
+            flagged[mer.restype]["duplicate"].append(mer.resource)
+
+    if not is_duplicate and mer.exists:
+        # Record ONLY if unique and exists
+        breakdown[mer.subid][mer.restype].append(
+            {
+                "id": mer.id,
+                "resource": mer.resource,
+                "group": mer.resourceGroup,
+                "exists" : mer.exists
+            }
     )
 
 # Now dump out everything for all subs

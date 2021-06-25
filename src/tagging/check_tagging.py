@@ -39,7 +39,10 @@ if "delete_on_missing" not in cfg.tagging:
     raise Exception("Missing delete_on_missing from tagging")
 if "tagDirectory" not in cfg.tagging:
     raise Exception("Missing tagDirectory from tagging")
+if "ignored" not in cfg.tagging:
+    raise Exception("Missing tagDirectory from tagging")
 
+# Required output directory    
 tagging_path = "./" + cfg.tagging["tagDirectory"] 
 PathUtils.ensure_path(tagging_path)
 
@@ -80,6 +83,8 @@ for subid in cfg.subscriptions:
             continue
 
         flag_untagged = False
+        # Ignore if it's managed by something else, otherwise
+        # validate it has the required tag(s)
         if group["managedBy"]: 
             output["managedGroups"] += 1
         elif group["tags"]:
@@ -100,7 +105,7 @@ for subid in cfg.subscriptions:
             if cfg.tagging["delete_on_missing"] is True:
                 print("Deleting ", group["name"])
 
-                # Get locks first
+                # Get locks first and delete them.
                 locks = AzLockUtils.get_group_locks(group["name"], subid)
                 if locks and len(locks):
                     for lock in locks:

@@ -1,5 +1,6 @@
 {
     "subscriptions" : [
+        "9086b59a-02d7-4687-b3fd-e39fa5e0fd9b"
     ],
     "principals" : {
         "roleDirectory" : "raw_roles",
@@ -9,13 +10,13 @@
     "tagging" : {
         "description": "Tag names and ignored group names must be lower case",
         "required_tags": ["alias"],
-        "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "cloud-shell-storage", "visualstudioonline-", "databricks-rg-"],
+        "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "visualstudioonline-", "databricks-rg-"],
         "delete_on_missing" : false,
         "tagDirectory" : "tag_compliance"
     },
     "compute" : {
         "include_managed_compute" : false,
-        "stop_running" : false,
+        "stop_running" : true,
         "computeDirectory" : "compute_status"
     },
     "roles" : {

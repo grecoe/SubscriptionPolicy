@@ -22,22 +22,6 @@ if not len(cfg.subscriptions):
     raise Exception("Update configuration.json with sub ids")
 
 stats = AzKeyVaultUtils.check_soft_delete_status(cfg.subscriptions)
-"""
-total = 0
-unlocked = []
-for subid in cfg.subscriptions:
-    vaults = AzKeyVaultUtils.list_vaults(subid)
-
-    if vaults and len(vaults):
-        total += 1
-        for vault in vaults:
-            props = AzKeyVaultUtils.get_vault(vault["name"], subid)
-            sd_enabled = props["properties"]["enableSoftDelete"]
-            print(vault["name"], "->", sd_enabled)
-            if not sd_enabled:
-                unlocked.append(vault["name"])                
-                AzKeyVaultUtils.enable_softdelete(vault["name"], subid)
-"""
 
 with open("./vault_scan.json", "w") as output:
     data = {

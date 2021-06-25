@@ -1,10 +1,5 @@
 import json
-
-class GenericObjectJson:
-    def __init__(self, props):
-
-        for prop in props:
-            setattr(self, prop, props[prop])
+from .generic import GenericObjectJson
 
 
 class JsonFileUtil:
@@ -52,38 +47,3 @@ class JsonFileUtil:
                 generic_object_return[jgen.principalId] = jgen
 
         return generic_object_return
-"""
-Duplication issues:
-
-{
-    "canDelegate": null,
-    "condition": null,
-    "conditionVersion": null,
-    "description": null,
-    "id": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45/providers/Microsoft.Authorization/roleAssignments/a2a9351e-3df3-4e7c-ae97-17f4fb755363",
-    "name": "a2a9351e-3df3-4e7c-ae97-17f4fb755363",
-    "principalId": "019d485c-1675-4ea4-b8a1-a6792b586227",
-    "principalName": "prsol@microsoft.com",
-    "principalType": "User",
-    "roleDefinitionId": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c",
-    "roleDefinitionName": "Contributor",
-    "scope": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45",
-    "type": "Microsoft.Authorization/roleAssignments"
-}
-
-{
-    "canDelegate": null,
-    "condition": null,
-    "conditionVersion": null,
-    "description": null,
-    "id": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45/providers/Microsoft.Authorization/roleAssignments/364a9e67-ba61-4ed3-8b48-4a8f35d83aca",
-    "name": "364a9e67-ba61-4ed3-8b48-4a8f35d83aca",
-    "principalId": "019d485c-1675-4ea4-b8a1-a6792b586227",
-    "principalName": "prsol@microsoft.com",
-    "principalType": "User",
-    "roleDefinitionId": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
-    "roleDefinitionName": "Owner",
-    "scope": "/subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45",
-    "type": "Microsoft.Authorization/roleAssignments"
-}
-"""

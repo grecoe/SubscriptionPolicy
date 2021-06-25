@@ -30,8 +30,8 @@ if not len(map_files):
 
 # Principals to clear out
 principals_to_clean = [
-    "List of principal ids to clear"
-]
+    "b117fb46-ca71-48fc-b895-c5c4c5a077de",
+    "3ac2d09e-ca3d-4712-a33c-33f179eefb05"]
 
 if not len(principals_to_clean):
     raise Exception("Provide some SP ID's to clear out")
