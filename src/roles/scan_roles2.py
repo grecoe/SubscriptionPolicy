@@ -18,6 +18,7 @@ from utils.pathutils import PathUtils
 from utils.roles import AzRolesUtils
 from utils.login import AzLoginUtils
 
+
 def get_type(scope):
     # /subscriptions/1b365fe2-5882-4935-bd81-8027e0816b45/resourceGroups/daden1/providers/Microsoft.Storage/storageAccounts/daden1exp2ws2677378701
     parts = scope.split('/')
@@ -27,6 +28,10 @@ def get_type(scope):
         return "ResourceGroup"
     
     return parts[6].lower()
+
+def get_subscription(scope : str):
+    parts = scope.split('/')
+    return parts[2]
 
 
 # Ensure a login and switch to SP if requested
@@ -49,79 +54,74 @@ if "roleSummaryDirectory" not in cfg.roles:
 usable_path = "./" + cfg.roles["roleSummaryDirectory"]
 PathUtils.ensure_path(usable_path)
 
+statistics = {
+    "types" : {},
+    "distribution" : {},
+    "scopes" : {}
+}
+
+total_sps_all = 0
+owning_sps = 0
+total_sps = []
+
 for subid in cfg.subscriptions:
     print("Getting role assigments for", subid)
     output = AzRolesUtils.get_all_roles(subid, False)
 
-    users = {}
-    groups = {}
-    principals = {}
-    types_coll = {}
     
-
     # Summary or all of them
     types = [x.principalType for x in output if subid in x.scope]
     for t in types:
-        if t not in types_coll:
-            types_coll[t] = 0
-        types_coll[t] += 1
-    types_coll["UserAssignments"] = 0
-    types_coll["GroupAssignments"] = 0
-    types_coll["SPAssignments"] = 0
+        if t not in statistics["types"]:
+            statistics["types"][t] = 0
+        statistics["types"][t] += 1
 
+    unknown = 1
     for role in output:
-        toadd = role.principalName if role.principalName else role.principalId
-        if not toadd:
-            toadd = "UNKNOWN"
-
         if subid not in role.scope:
-                continue         
-        
-        if role.principalType.lower() == 'user':
-            types_coll["UserAssignments"] += 1
-            dist = get_type(role.scope)
-            if dist not in users:
-                users[dist] = []
-            users[dist].append("USER - {} - {} - {}".format(
-                toadd,
-                role.roleDefinitionName,
-                role.scope
-            ))
+            continue 
 
-        if role.principalType.lower() == "serviceprincipal":
-            types_coll["SPAssignments"] += 1
-            dist = get_type(role.scope)
-            if dist not in principals:
-                principals[dist] = []
-            principals[dist].append("SP - {} - {} - {}".format(
-                toadd,
-                role.roleDefinitionName,
-                role.scope
-            ))
+        toadd = role.principalName if role.principalName else role.principalId
+
+        dist = get_type(role.scope)
+        if dist not in statistics["distribution"]:
+            statistics["distribution"][dist] = 0
+
+            if dist not in statistics["scopes"]:
+                statistics["scopes"][dist] = [] 
+            statistics["scopes"][dist].append("{} - {}".format(toadd, role.scope))
+
+        statistics["distribution"][dist] += 1
 
 
-        if role.principalType.lower() == 'group':
-            types_coll["GroupAssignments"] += 1
-            dist = get_type(role.scope)
-            if dist not in groups:
-                groups[dist] = []
-            groups[dist].append("AAD GROUP - {} - {} - {}".format(
-                toadd,
-                role.roleDefinitionName,
-                role.scope
-            ))
-        
-    output_data = {
-        "Summary" : types_coll,
-        "Groups" : groups,
-        "Users" : users,
-        "Principals" : principals
-    }        
+        if role.principalType == "ServicePrincipal":
+            if role.roleDefinitionName == "Owner":
+                owning_sps += 1
+            total_sps_all += 1
+            if toadd not in total_sps:
+                total_sps.append(toadd)
+            
+        """
+        if role.scope not in statistics["scopes"]:
+            statistics["scopes"][role.scope] = {}
+
+        if role.roleDefinitionName.lower() not in statistics["scopes"][role.scope]:
+            statistics["scopes"][role.scope][role.roleDefinitionName.lower()] = {}
+
+        if role.principalType.lower() not in statistics["scopes"][role.scope][role.roleDefinitionName.lower()]:
+            statistics["scopes"][role.scope][role.roleDefinitionName.lower()][role.principalType.lower()] = 0
+
+        statistics["scopes"][role.scope][role.roleDefinitionName.lower()][role.principalType.lower()] += 1
+        """
 
     file_path = os.path.join(usable_path, "{}.json".format(subid))
     with open(file_path, "w") as summary_report:
         summary_report.writelines(
-            json.dumps(output_data, indent=4)
+            json.dumps(statistics, indent=4)
         )
 
 print("Role summary collected")
+
+print("All SP Assignments", total_sps_all)
+print("Unique SP's ->", len(total_sps))
+print("Owner SPs", owning_sps)

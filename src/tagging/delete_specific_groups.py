@@ -17,10 +17,8 @@ except Exception as ex:
     print(str(ex))
     quit()
 
-sub_id = "Your Sub ID"
-groups = [
-        "list of rg's"
-]
+sub_id = "sub id to clean"
+groups = ["list of group names"]
 
 print("Deleting {} groups from {}".format(
     len(groups),

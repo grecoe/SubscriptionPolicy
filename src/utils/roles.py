@@ -1,5 +1,28 @@
 from .cmdline import CmdUtils
 
+class AzAdLoader:
+    @staticmethod
+    def load_props(obj, props):
+        for key in obj.__dict__:
+            if key in props:
+                setattr(obj, key, props[key])
+
+class AzAdSp:
+    def __init__(self, props):
+        # Display name, appId, servicePrincipalType
+        self.displayName = None
+        self.appId = None
+        self.servicePrincipalType = None
+        self.owners = []
+        AzAdLoader.load_props(self,props)
+
+class AzAdUser:
+    def __init__(self, props):
+        # objectId, mail, department
+        self.objectId = None
+        self.mail = None
+        self.department = None
+        AzAdLoader.load_props(self,props)
 
 class AzRole:
     def __init__(self):
@@ -14,11 +37,16 @@ class AzRole:
         self.scope = None
 
     def get_delete_command(self):
+        """
         command = "az role assignment delete --assignee {} --role {} --scope {} --subscription {}".format(
             self.principalId,
             self.roleDefinitionId,
             self.scope, 
             self.subscription
+        )
+        """
+        command = "az role assignment delete --ids {}".format(
+            self.id
         )
         return command
 
@@ -89,3 +117,26 @@ class AzRolesUtils:
             return_list.append(cur_role)
         return return_list
 
+    @staticmethod
+    def get_aad_sp_info(principal_id:str):
+        command = "az ad sp show --id {}".format(principal_id)
+        raw =  CmdUtils.get_command_output(command.split(' '))
+        if raw:
+            sp_obj = AzAdSp(raw)
+            owners = AzRolesUtils._get_aad_sp_owners(principal_id)
+            if owners and len(owners):
+                for owner in owners:
+                    sp_obj.owners.append(AzAdUser(owner))
+            return sp_obj
+
+        return None
+
+    @staticmethod
+    def _get_aad_sp_owners(principal_id: str):
+        command = "az ad sp owner list --id {}".format(principal_id)
+        return CmdUtils.get_command_output(command.split(' '))
+
+    @staticmethod
+    def get_aad_group_members(group : str):
+        command = "z ad group member list --group {}".format(group)
+        return CmdUtils.get_command_output(command.split(' '))
