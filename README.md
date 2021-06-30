@@ -93,6 +93,7 @@ This task should be run periodically.
 ||ClearUserAssignments|Removes any User role assignments on the subscription at the subscription level (ignoring Resource Group and Resource assignments) that helps to enforce a Azure Active Directory Group access policy.<br><br>There is a single parameter 'deleteAssignments' which is a boolean. Regardless of value output is recorded in the 'taskOutputDirectory' path.<br><br>This value can be overriden in an automation environment setting 'automation' global to true.|
 ||ClearInvalidPrincipals|Scans a sub for all Service Princpal assignments and ensures that the Service Principal still exists in Azure Active Directory. If the principal cannot be found, it's role assignments on the subscription are deleted.|
 
+[Return to top](#contents)
 
 ## task_compute.py
 
@@ -107,6 +108,7 @@ This task should be run whenever there are lull times in the office - weekend an
 |configuration.json<br>task group||compute|
 ||DeallocateUserCompute|Deallocates virtual machines across a subscription that are not in a managed group.<br><br>You can set include_managed_compute to true to include clusters.<br><br>stop_running determines whether you just want a report or a report AND shut down machines. This is overriden when the global automation flag is true.<br><br>All output ends up in taskOutputDirectory|
 
+[Return to top](#contents)
 
 ## task_keyvaults.py
 
@@ -116,6 +118,8 @@ This task has no pareters as of yet, it's sole job is to ensure that Soft Delete
 |--|--|---|
 |configuration.json<br>task group||keyvault|
 ||EnableSoftDelete|Without parameters, scans all Azure Key Vaults in your subscriptions and enforces that Soft Delete functionality is enabled.<br><br>All output ends up in taskOutputDirectory|
+
+[Return to top](#contents)
 
 
 ## task_storage.py
@@ -135,6 +139,7 @@ This tag should be run periodically, weekly at a minimum.
 |configuration.json<br>task group||storage|
 ||EnableSecurity|Will enforce all three settings (public blob, https, logging) on storage accounts.<br><br>forceUpdate when true will go into each storage account and make the appropriate changes. When false, accounts with public blob access allowed are the only ones touched. This is overriden when the global automation flag is true.<br><br>All output ends up in taskOutputDirectory|
 
+[Return to top](#contents)
 
 
 ## task_rg_compliance.py
@@ -155,5 +160,6 @@ Tags required for the scan are located at groupCompliance.active_tasks.EnforceCo
 ||DeleteGroups|A non automatable process to removing specific resource groups from a subscription. User must provide the subscription ID and resource group names in configuration.json.|
 ||EnforceCompliance|Enforces the tagging policy described above.<br><br>delete_on_missing - when true will delete any resource group that fails the basic compliance check. When false, simply outputs a log for each subscription. This is overriden when the global automation flag is true.<br><br>All output whether an action occurs or not ends up in taskOutputDirectory|
 
+[Return to top](#contents)
 
 
