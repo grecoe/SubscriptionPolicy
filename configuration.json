@@ -1,6 +1,7 @@
 {
     "automation" : false,
     "subscriptions" : [
+
     ],
     "identity" : {
         "taskOutputDirectory" : "./logs/identity_summary",
