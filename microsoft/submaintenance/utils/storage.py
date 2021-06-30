@@ -1,6 +1,6 @@
 import json
 import os
-from .group import AzResourceGroup
+from .group import AzResourceGroupUtils
 from .cmdline import CmdUtils
 
 class AzStorageUtil:
@@ -103,7 +103,7 @@ class AzStorageUtil:
             for account in accounts:
                 print("\tInspect Storage", account["name"])
 
-                group_info = AzResourceGroup.get_group(subid, account["resourceGroup"])
+                group_info = AzResourceGroupUtils.get_group(subid, account["resourceGroup"])
 
                 # Only get this flag if we aren't forcing update. Faster
                 blob_access_open = False

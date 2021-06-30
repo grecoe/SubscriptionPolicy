@@ -1,30 +1,108 @@
 {
+    "automation" : false,
     "subscriptions" : [
     ],
-    "principals" : {
-        "roleDirectory" : "raw_roles",
-        "mapDirectory" : "raw_s360_map",
-        "ownerMap" : "raw_sp_owners"
+    "identity" : {
+        "taskOutputDirectory" : "./logs/identity_summary",
+        "availableTasks" : { 
+            "ReportAssignments" : {
+                "Descripton" :"Report all assignments to a file, no settings",
+                "Parameters" : null
+            },
+            "ClearUserAssignments" : {
+                "Descripton" :"Remove all sub level USER role assignments",
+                "Parameters" : {
+                    "deleteAssignments" : "Flag on whether to remove or not, overridden by automation if true"
+                }
+            }, 
+            "ClearInvalidPrincipals" : {
+                "Descripton" :"Remove any SP that does not have an AAD entry, no settings",
+                "Parameters" : null
+            }
+        },
+        "active_tasks" : {
+            "ReportAssignments" : null,
+            "ClearUserAssignments" : {
+                "deleteAssignments" : false
+            },
+            "ClearInvalidPrincipals" : null
+        }
     },
-    "tagging" : {
-        "description": "Tag names and ignored group names must be lower case",
-        "required_tags": ["alias"],
-        "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "visualstudioonline-", "databricks-rg-"],
-        "delete_on_missing" : false,
-        "tagDirectory" : "tag_compliance"
+    "groupCompliance" : {
+        "taskOutputDirectory" : "./logs/group_compliance",
+        "availableTasks" : { 
+            "EnforceCompliance" : {
+                "Descripton" :"Remove resource groups that do not meet compliance",
+                "Parameters" : {
+                    "required_tags" : "list of tag names that MUST exist on a group",
+                    "ignored" : "list of lowercase names that start an rg name to ignore",
+                    "delete_on_missing" : "Flag on whether to remove or not, overridden by automation if true"
+                }
+            }, 
+            "DeleteGroups" :{
+                "Descripton" :"Non automatable, remove specified groups from specified sub",
+                "Parameters" : {
+                    "subscription" : "subscription id",
+                    "groups" : "list of groups to remove from the sub"
+                }
+            }
+        },
+        "active_tasks" : {
+            "EnforceCompliance" : {
+                "required_tags": ["alias"],
+                "ignored" : ["cleanupservice", "defaultresourcegroup","networkwatcherrg", "visualstudioonline-", "cloud-shell-storage-"],
+                "delete_on_missing" : false
+            },
+            "DeleteGroups" : {
+                "subscription" : "Your Subscription ID",
+                "groups" : ["list of your group names in sub"]
+            }
+        }
     },
     "compute" : {
-        "include_managed_compute" : false,
-        "stop_running" : false,
-        "computeDirectory" : "compute_status"
+        "taskOutputDirectory" : "./logs/compute_status",
+        "availableTasks" : { 
+            "DeallocateUserCompute" : {
+                "Descripton" :"Deallocate VMs not in managed group",
+                "Parameters" : {
+                    "include_managed_compute" : "boolean to look at managed compute as well",
+                    "stop_running" : "Flag on whether to dealloate or not, overridden by automation if true"
+                }
+            }
+        },
+        "active_tasks" : {
+            "DeallocateUserCompute" : {
+                "include_managed_compute" : false,
+                "stop_running" : false
+            }
+        } 
     },
-    "roles" : {
-        "roleSummaryDirectory" : "role_summary",
-        "clearRolesSubId" : "SUB ID TO CLEAN",
-        "deleteUserRoles" : false
+    "keyvault" : {
+        "taskOutputDirectory" : "./logs/kevault_status",
+        "availableTasks" : { 
+            "EnableSoftDelete" : {
+                "Descripton" :"Scans subscriptions and forces soft delete on for key vaults",
+                "Parameters" : null
+            }
+        },
+        "active_tasks" : {
+            "EnableSoftDelete" : null
+        } 
     },
     "storage" : {
-        "storageSummaryDirectory" : "storage_summary",
-        "forceUpdate" : false
+        "taskOutputDirectory" : "./logs/storage_status",
+        "availableTasks" : { 
+            "EnableSecurity" : {
+                "Descripton" :"Scans subscriptions for storage and optionally force updates public blob, logging, and https",
+                "Parameters" : {
+                    "forceUpdate" : "Flag on whether to force security or not, overridden by automation if true"
+                }
+            }
+        },
+        "active_tasks" : {
+            "EnableSecurity" : {
+                "forceUpdate" : false
+            }
+        } 
     }
 }

@@ -36,22 +36,8 @@ class AzRole:
         self.roleDefinitionId = None
         self.scope = None
 
-    def get_delete_command(self):
-        """
-        command = "az role assignment delete --assignee {} --role {} --scope {} --subscription {}".format(
-            self.principalId,
-            self.roleDefinitionId,
-            self.scope, 
-            self.subscription
-        )
-        """
-        command = "az role assignment delete --ids {}".format(
-            self.id
-        )
-        return command
-
     def delete(self):
-        command = self.get_delete_command()
+        command = AzRole.get_delete_command(self.id)
         command = command.split(' ')
 
         name = self.principalName if self.principalName else self.principalId 
@@ -60,6 +46,20 @@ class AzRole:
             name
         ))
         CmdUtils.get_command_output(command,False)
+
+    @staticmethod
+    def get_delete_command(assignment_id:str) -> str:
+        """Command to delete an assignment based on id (most effective)
+        Parameters
+        assignment_id : Azure Identifier for the role assignment
+
+        Returns:
+        String for the command to execute
+        """
+        command = "az role assignment delete --ids {}".format(
+            assignment_id
+        )
+        return command
 
     def _load_raw(self, az_role_json:dict):
         for key in az_role_json:

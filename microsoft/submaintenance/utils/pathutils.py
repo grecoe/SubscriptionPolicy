@@ -6,6 +6,7 @@ class PathUtils:
     def ensure_path(directory_path: str):
         if not os.path.exists(directory_path):
             os.makedirs(directory_path)
+        return directory_path
 
     @staticmethod 
     def get_files_in_path(directory_path: str):

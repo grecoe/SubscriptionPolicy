@@ -4,6 +4,11 @@ __pycache__/
 *$py.class
 
 # Local running files
+logs/
+__dump/
+tools/endpoints/open_endpoints/
+tools/endpoints/*.tsv
+
 src/principals/raw_roles/
 src/principals/raw_s360_map/
 src/principals/raw_sp_owners/

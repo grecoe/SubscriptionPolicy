@@ -1,6 +1,6 @@
 from .cmdline import CmdUtils
 
-class AzResourceGroup:
+class AzResourceGroupUtils:
 
     @staticmethod
     def get_group(sub_id: str, group_name: str):
