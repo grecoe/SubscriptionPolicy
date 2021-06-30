@@ -2,14 +2,14 @@
 
 ### Contents
 - [Configurations](#configurations)
-    - [configuration.json](#configuration.json)
-    - [credentials.json](#credentials.json)
+    - [configuration.json](#configurationjson)
+    - [credentials.json](#credentialsjson)
 - [Tasks](#tasks)
-    - [Identity Tasks](#task_identity.py)
-    - [Azure Virtual Machine Tasks](#task_compute.py)
-    - [Azure Key Vault Tasks](#task_keyvaults.py)
-    - [Azure Storage Security](#task_storage.py)
-    - [Azure Resource Group Compliance](#task_rg_compliance.py)
+    - [Identity Tasks](#task-identitypy)
+    - [Azure Virtual Machine Tasks](#task_computepy)
+    - [Azure Key Vault Tasks](#task_keyvaultspy)
+    - [Azure Storage Security](#task_storagepy)
+    - [Azure Resource Group Compliance](#task_rg_compliancepy)
 
 
 This repo has some utilities useful for managing certain aspects of your Azure Subscriptions. Particularly those that need or want to follow certain policies as we have done internally. 
