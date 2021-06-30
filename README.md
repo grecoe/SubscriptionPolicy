@@ -5,7 +5,7 @@
     - [configuration.json](#configurationjson)
     - [credentials.json](#credentialsjson)
 - [Tasks](#tasks)
-    - [Identity Tasks](#task-identitypy)
+    - [Identity Tasks](#task_identitypy)
     - [Azure Virtual Machine Tasks](#task_computepy)
     - [Azure Key Vault Tasks](#task_keyvaultspy)
     - [Azure Storage Security](#task_storagepy)
