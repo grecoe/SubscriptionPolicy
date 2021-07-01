@@ -1,32 +1,20 @@
-# Weekly Sub Grooming Tasks
+# AG CI AI Weekly Tasks
 
-This is the list of tasks that should occur every week. Preferably in an automated way. 
+As of June 18, 2021 a series of tasks are run on Saturday at 0200 UTC time. 
 
-Step 5 for compute is an unknown, but at least run Friday nights. 
+The group of tasks run can be found in autocleanup.py in this directory. 
 
-1. Verify that configuration.json contains all of the subscription ID's that the scripts are intended to target. 
-1. Clean up untagged resource groups
-    - Ensure tagging.delete_on_missing is true
-    - Run src/tagging/check_tagging.py
-1. Enforce storage account settings - but force not needed after first time
-    - Ensure storage.forceUpdate is false (unless you want to update all or first time, depending on your sub(s) this could be quite slow.)
-    - run src/storage/update_storage.py
-1. Enforce group only access to subscriptions by deleting "User" level access at the Subscription level
-    - Ensure roles.deleteUserRoles is true (false will just give you a summary)
-    - run src/roles/clear_user_roles.py    
-1. Turn off user compute
-    - Ensure compute.stop_running = true (shut down VM's found)
-    - Ensure compute.include_managed_compute = false (won't shut down clusters)
-    - run src/compute/stop_compute.py
-1. Ensure all Azure Key Vaults have Soft Delete enabled. 
-1. Scale Down Expensive Services
-    - Power BI Embed -> A2
-    - Data Explorer -> Dev(No SLA)_Standard_D11_v2
-    - DataBricks -> Enable Auto Cluster Turnoff
-    - Kubernetes -> Standard_D3_v2
-    - Batch -> Enable Auto Scaling/standard_d2s_v3
-    - CosmosDB -> Autoscaling Enabled
+The tasks are all configured through the configuration.json also found in this directory. Details of setting can be found in each of the task_* scripts and also described in the [Readme.md](./README.md) master document. 
 
+## Tasks run in order
 
-## s360 Service Principals
-Look at src/principals/Readme.md as it's a multi step process that needs data from Lens to proceed. I don't know of any way that really can be automated.     
+> To ensure that all tasks will run in unattended mode AND perform actual work, modifiy configuration.json :<br><br>"automation" : true<br><br>"subscriptions" contains a list of subscriptions.<br><br>credentials.json has a valid Service Principal identified with access to the list of subscriptions above. 
+
+|Order|Script|Description|
+|----|----|----------------------|
+|1|task_rg_compliance.py|Delete resource groups that do not follow the compliance rules as defined by the team:<br>- Is not a managed group<br>- Is not a default Azure Resource Group<br>- Is not tagged with required tags.|
+|2|task_identity.py|1. Remove all User level role assignments on the set of subscriptions at the subscription level to enforce AAD group access.<br><br>2. Clear Service Principals that have an assignment in the subscription but are not found in AAD.|
+|3|task_compute.py|Deallocate (shut down) personal virtual machines which are VM's not contained in a managed resource group.|
+|4|task_storage.py|For all Azure Storage accounts found in the subscripiton FORCE the following:<br><br>- Disable public blob access<br>- Enforce HTTPS only access<br>- Enforce logging|
+|5|task_keyvaults.py|For all Azure Key Vaults found in the subscription verify that it has Soft Delete enabled. If not enable it.|
+

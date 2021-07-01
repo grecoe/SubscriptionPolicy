@@ -10,7 +10,7 @@
     - [Azure Key Vault Tasks](#task_keyvaultspy)
     - [Azure Storage Security](#task_storagepy)
     - [Azure Resource Group Compliance](#task_rg_compliancepy)
-- [Automation](./WeeklyTasks.md)
+- [Automation Tasks](./WeeklyTasks.md)
 - [Tools](#tools)
     - [S360 Overprivileged Service Principals](#tool_s360_sppy)
     - [S360 Open Endpoints](#tool_s360_endpointspy)
