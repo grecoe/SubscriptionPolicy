@@ -10,7 +10,10 @@
     - [Azure Key Vault Tasks](#task_keyvaultspy)
     - [Azure Storage Security](#task_storagepy)
     - [Azure Resource Group Compliance](#task_rg_compliancepy)
-
+- [Automation](./WeeklyTasks.md)
+- [Tools](#tools)
+    - [S360 Overprivileged Service Principals](#tool_s360_sppy)
+    - [S360 Open Endpoints](#tool_s360_endpointspy)
 
 This repo has some utilities useful for managing certain aspects of your Azure Subscriptions. Particularly those that need or want to follow certain policies as we have done internally. 
 
@@ -72,7 +75,7 @@ Every task will validate if there is a valid Azure login in effect. This can be 
 
 Simply add in the information about your service principal and set the usePrincipal field to true. 
 
-
+[Return to top](#contents)
 
 # Tasks
 
@@ -162,4 +165,36 @@ Tags required for the scan are located at groupCompliance.active_tasks.EnforceCo
 
 [Return to top](#contents)
 
+# Tools
 
+This section contains a few tools to be used to help with S360 compliance after items have gone out of SLA whereas the task_* scripts try to prevent them becoming an issue in the first place. 
+
+Read the descriptions below, more detailed instructions are located in each script file. 
+
+## tool_s360_sp.py
+One of the biggest issues faced when a subscription is put under the security lens of a production system is Overprileged Service Principals. 
+
+This happens as teams are relying on SP's to provide functionality/access from one system to the other but generally don't clean them up. 
+
+Using the output from S360, this tool will clear out the reported assignments that are not in compliance with the security standard. 
+
+Read the doc string at the top of the file for more instructions. 
+
+> This tool cannot be automated.
+
+[Return to top](#contents)
+
+
+## tool_s360_endpoints.py
+
+[Return to top](#contents)
+Another significant issue with S360 reporting is Network Isolation. This generally shows up in the form of service having open endpoints that are not allowed with the production level security requirements. 
+
+This tool doesn't neccesarily solve the issue for you but it does whittle down lists of non compliant resources to a focused list of what needs to be worked on. The reason for this?
+
+1. The reports can be out of date, so the tool verifies that the resource group in which the resource resides in still exists. We experienced several items being reported on days after they no longer existed in the Subscription. 
+2. The report can also contain duplicates which effectively are noise and get filtered out of the net result. 
+
+See the script file for details on how to collect the information to filter. 
+
+> This tool cannot be automated.
