@@ -37,6 +37,6 @@ except Exception as ex:
 
 
 az_id = AzIdentities()
-s360report = "C:\\gitrepogrecoe\\SubscriptionPolicy\\__dump\\src\\principals\\June29.csv"
+s360report = "C:\\...\\your_principals.csv"
 res = az_id.clear_s360_principals(s360report)
 print(json.dumps(res, indent=4))

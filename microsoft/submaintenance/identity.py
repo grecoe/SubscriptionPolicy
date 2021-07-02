@@ -1,4 +1,5 @@
 import os
+import json
 import typing
 from .utils.csvloader import S360Reader
 from .utils.roles import (
@@ -153,7 +154,7 @@ class AzIdentities:
 
                 # Scan service principals (not users or groups)
                 found_principals = [x for x in sub_data.sps if x.principalId == entity.principalId]
-                found_scopes = [x for x in found_principals if x.scope == entity.roleScope]
+                found_scopes = [x for x in found_principals if x.scope.lower() == entity.roleScope.lower()]
 
                 if entity.subscription not in return_collection:
                     return_collection[entity.subscription] = 0
