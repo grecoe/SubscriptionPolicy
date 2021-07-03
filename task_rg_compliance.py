@@ -67,6 +67,9 @@ if not configuration.groupCompliance["taskOutputDirectory"]:
 # Create output path for all tasks
 task_output_path = PathUtils.ensure_path(configuration.groupCompliance["taskOutputDirectory"])
 
+delete_groups_flag_set = False
+delete_groups_flag = False
+
 # Iterate tasks 
 group_compliance = AzGroupCompliance()
 for task_name in configuration.groupCompliance["active_tasks"]:
@@ -74,6 +77,7 @@ for task_name in configuration.groupCompliance["active_tasks"]:
         print("Unknown task {} skipping...".format(task_name))
 
     task_settings = configuration.groupCompliance["active_tasks"][task_name]
+
 
     if task_name.lower() == allowed_tasks[0]:
         print("Performing GroupCompliance task")
@@ -85,6 +89,17 @@ for task_name in configuration.groupCompliance["active_tasks"]:
         if "delete_on_missing" not in task_settings:
             raise Exception("Must have delete_on_missing in groupCompliance.active_tasks.EnforceCompliance in configuration")
 
+        if not delete_groups_flag_set:
+            delete_groups_flag_set = True
+            if configuration.automation:
+                print("Automation will bypass asking for permission....")
+                delete_groups_flag = True
+            elif task_settings["delete_on_missing"]:
+                delete_groups_flag = True
+                resp = input("Delete untagged groups (Y/y)? > ")
+                if resp.lower() != "y":
+                    delete_groups_flag = False
+
         for sub_id in configuration.subscriptions:
             filtered_groups = group_compliance.get_filtered_groups(
                 sub_id,
@@ -92,19 +107,10 @@ for task_name in configuration.groupCompliance["active_tasks"]:
                 task_settings["required_tags"]
             )
             
-            delete_groups_flag = False
-            if configuration.automation:
-                print("Automation will bypass asking for permission....")
-                delete_groups_flag = True
-            elif task_settings["delete_on_missing"]:
-                resp = input("Delete untagged groups (Y/y)? > ")
-                if resp.lower() != "y":
-                    delete_groups_flag = False
 
             if delete_groups_flag:
-                print("Good by!")
-                #for group in filtered_groups.untagged:
-                #    AzResourceGroupUtils.delete_group(group, sub_id)
+                for group in filtered_groups.untagged:
+                    AzResourceGroupUtils.delete_group(group, sub_id)
 
             file_path = os.path.join(task_output_path, "{}.json".format(sub_id))
             with open(file_path, "w") as output_file:
