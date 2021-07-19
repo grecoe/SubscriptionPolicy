@@ -1,7 +1,7 @@
 import os
-import sys
 from time import perf_counter
 from microsoft.submaintenance.utils import CmdUtils
+from microsoft.submaintenance.utils import PathUtils
 
 
 scripts = [
@@ -34,6 +34,13 @@ for script in scripts:
 
     print(script["description"])
     res = CmdUtils.get_command_output(["python", script["script"]], False)
+
+    log_file = PathUtils.ensure_path("./logs")
+    log_file = os.path.join(log_file, "{}.log".format(script["script"]))
+    with open(log_file, "w") as output_log:
+        output_log.write(res)
+        output_log.write("\nSTDERR\n")
+        output_log.write(CmdUtils.get_last_errors())
 
     print("{}\nRunning Time:{}".format(
         script["description"], 

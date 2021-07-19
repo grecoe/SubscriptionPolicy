@@ -89,20 +89,29 @@ class AzStorageUtil:
             AzStorageUtil._enable_logging(connection_string, sub_id)
 
     @staticmethod 
-    def secure_storage(logging_path:str, subscriptions: list, force_update:bool):
+    def secure_storage(logging_path:str, subscriptions: list, ingored_accounts: list, force_update:bool):
         for subid in subscriptions:
             # Stats to collect
             account_overview = {
+                "ignored" : {"total" : 0},
                 "managedGroupStorage" : {"total" : 0, "open" : 0, "accounts" : []},
                 "unmanagedGroupStorage" : {"total" : 0, "open" : 0, "accounts" : []},
             }
 
             print("Inspect subscripiton", subid)
+        
             accounts = AzStorageUtil.list_accounts(subid)
+
+            case_insensitive_accounts = [x.lower() for x in ingored_accounts]
 
             for account in accounts:
                 print("\tInspect Storage", account["name"])
 
+                if account["name"].lower() in case_insensitive_accounts:
+                    print("Ignoring storage {}".format(account["name"]))
+                    account_overview["ignored"]["total"] += 1
+                    continue
+                
                 group_info = AzResourceGroupUtils.get_group(subid, account["resourceGroup"])
 
                 # Only get this flag if we aren't forcing update. Faster

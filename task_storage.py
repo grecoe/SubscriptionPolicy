@@ -77,6 +77,7 @@ for task_name in configuration.storage["active_tasks"]:
         AzStorageUtil.secure_storage(
             task_output_path,
             configuration.subscriptions,
+            task_settings["ignoredAccounts"],
             force_update
         )
 

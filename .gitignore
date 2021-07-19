@@ -5,26 +5,7 @@ __pycache__/
 
 # Local running files
 logs/
-__dump/
-tools/endpoints/open_endpoints/
-tools/endpoints/*.tsv
-
-src/principals/raw_roles/
-src/principals/raw_s360_map/
-src/principals/raw_sp_owners/
-src/principals/*.csv
-src/principals/cleanupoutput.txt
-src/principals/killall.json
-src/principals/UnusedServicePrincipals.csv
-src/tagging/tag_compliance/
-src/compute/compute_status/
-src/roles/role_summary/
-src/roles/role_paring/
-src/roles/validate_group_membership.py
-src/storage/storage_summary/
-src/endpoints/open_endpoints/
-src/endpoints/*.tsv
-arm/
+local/
 
 # C extensions
 *.so

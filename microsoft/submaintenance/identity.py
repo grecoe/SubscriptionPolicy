@@ -72,6 +72,7 @@ class AzIdentities:
             else:
                 print("Duplicate SP check skipped")
                 if seen_list[sp_role.principalId] == False:
+                    # Seen it but it wasn't there before so drop this too
                     return_count += 1
                     sp_role.delete()
                 continue
@@ -81,6 +82,7 @@ class AzIdentities:
             if actual_sp is None:
                 print("Principal not found in AAD....")
                 return_count += 1
+                # Not found so set flag for duplicates that come through
                 seen_list[sp_role.principalId] = False
                 sp_role.delete()
 

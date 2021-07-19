@@ -24,8 +24,7 @@
             "ReportAssignments" : null,
             "ClearUserAssignments" : {
                 "deleteAssignments" : false
-            },
-            "ClearInvalidPrincipals" : null
+            }
         }
     },
     "groupCompliance" : {
@@ -101,7 +100,8 @@
         },
         "active_tasks" : {
             "EnableSecurity" : {
-                "forceUpdate" : false
+                "forceUpdate" : false,
+                "ignoredAccounts" : ["dciborowmmlsparkstore"]
             }
         } 
     }
