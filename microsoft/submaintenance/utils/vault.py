@@ -11,11 +11,29 @@ class AzKeyVaultUtils:
         return CmdUtils.get_command_output(command.split(' '))
 
     @staticmethod
+    def list_deleted_vaults(sub_id : str):
+        command = "az keyvault list-deleted --subscription {}".format(
+            sub_id
+        )
+
+        return CmdUtils.get_command_output(command.split(' '))
+
+    @staticmethod
+    def purge_deleted_vault(sub_id: str, vault_name:str):
+        command = "az keyvault purge --subscription {} --name {} --no-wait".format(
+            sub_id,
+            vault_name
+        )
+
+        return CmdUtils.get_command_output(command.split(' '))
+
+    @staticmethod
     def get_vault(vault: str, sub_id: str):
         command = "az keyvault show --name {} --subscription {}".format(
             vault,
             sub_id
         )
+
 
         return CmdUtils.get_command_output(command.split(' '))
 

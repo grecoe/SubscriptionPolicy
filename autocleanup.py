@@ -22,6 +22,10 @@ scripts = [
         "script" : "./task_storage.py"
     },
     {
+        "description" : "KEYVAULT: Purge deleted key vaults",
+        "script" : "./tool_purge_sd_vaults.py"
+    },
+    {
         "description" : "KEYVAULT: Enforce soft delete see configuration.json keyvault",
         "script" : "./task_keyvaults.py"
     }
