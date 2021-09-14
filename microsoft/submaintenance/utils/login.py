@@ -66,6 +66,17 @@ class AzLoginUtils:
         return None
 
     @staticmethod
+    def set_current_account(sub_id: str):
+        command = "az account set -s {}".format(sub_id)
+        result = CmdUtils.get_command_output(command.split(" "))
+
+        if isinstance(result, dict):
+            return result
+        
+        return None
+
+
+    @staticmethod
     def logout():
         command = "az logout"
         CmdUtils.get_command_output(command.split(" "))
