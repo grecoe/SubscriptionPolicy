@@ -4,6 +4,8 @@
 - [Configurations](#configurations)
     - [configuration.json](#configurationjson)
     - [credentials.json](#credentialsjson)
+- [Credentials](#credentials)
+    - See also [credentials.json](#credentialsjson)
 - [Tasks](#tasks)
     - [Identity Tasks](#task_identitypy)
     - [Azure Virtual Machine Tasks](#task_computepy)
@@ -13,7 +15,10 @@
 - [Automation Tasks](./WeeklyTasks.md)
 - [Tools](#tools)
     - [S360 Overprivileged Service Principals](#tool_s360_sppy)
+    - [Generate PS1 for Overprivileged Service Principals](#tools_parse_s360sppy)
     - [S360 Open Endpoints](#tool_s360_endpointspy)
+    - [Flush Subscription](#tool_flushsubpy)
+    - [Purge Deleted Azure Key Vaults](#tool_purge_sd_vaultspy)
 
 This repo has some utilities useful for managing certain aspects of your Azure Subscriptions. Particularly those that need or want to follow certain policies as we have done internally. 
 
@@ -45,6 +50,14 @@ This is the main configuration for all of the task_*.py files that are used to e
     "storage" : {}
 }
 ```
+
+# Credentials
+
+Each of the tasks or tools listed in this file require some form of Azure CLI login to perform it's tasks. 
+
+If information for a service principal have been entered into the credentials.json file AND the usePrincipal field is set to true, the tasks/tools will attempt to create a login with that principal information. 
+
+Otherwise, the tools/tasks exepct you to have already performed an az login with credentials that will provide you owner level access to the subscriptions you are attempting to work on. 
 
 ### Tasks
 automation and subscriptions are used globally in all tasks. These tell the scripts whether to override settings and which subscriptions to work on respectively. 
@@ -172,6 +185,8 @@ This section contains a few tools to be used to help with S360 compliance after 
 Read the descriptions below, more detailed instructions are located in each script file. 
 
 ## tool_s360_sp.py
+> This tool cannot be automated.
+
 One of the biggest issues faced when a subscription is put under the security lens of a production system is Overprileged Service Principals. 
 
 This happens as teams are relying on SP's to provide functionality/access from one system to the other but generally don't clean them up. 
@@ -180,14 +195,13 @@ Using the output from S360, this tool will clear out the reported assignments th
 
 Read the doc string at the top of the file for more instructions. 
 
-> This tool cannot be automated.
 
 [Return to top](#contents)
-
 
 ## tool_s360_endpoints.py
 
-[Return to top](#contents)
+> This tool cannot be automated.
+
 Another significant issue with S360 reporting is Network Isolation. This generally shows up in the form of service having open endpoints that are not allowed with the production level security requirements. 
 
 This tool doesn't neccesarily solve the issue for you but it does whittle down lists of non compliant resources to a focused list of what needs to be worked on. The reason for this?
@@ -197,4 +211,47 @@ This tool doesn't neccesarily solve the issue for you but it does whittle down l
 
 See the script file for details on how to collect the information to filter. 
 
+[Return to top](#contents)
+
+## tools_parse_s360sp.py
 > This tool cannot be automated.
+
+[Return to top](#contents)
+
+This tool is used for generating files to send to other teams to remove their over privileged service principals. 
+
+This happens because you can see the S360 report but do not have physical access to the subscription. 
+
+You run this tool to produce a .txt file with all of the PS1 commands neccesary to resolve the principal problem. Since you cannot mail .ps1 files tell the recipient to rename it to .ps1
+
+On line 12 for the value of INPUT_FILE put in the local file you retrieved from Lens Explorer containing all of the service principals to remove. 
+
+## tool_flushsub.py
+
+> This tool cannot be automated.
+
+There are times you are going to need to drop an entire sub. 
+
+On line 15 of the script, put in the subscription ID of the subscription you want to clear.
+
+When executed the script will
+
+- Obtain a list of all resource groups in the subscription
+- For every resource group that is not managed (i.e. AKS clusters/etc)
+    - Remove any locks that may be present
+    - Delete the resource group
+
+
+Wait at least an hour before reviewing the subscripiton that was targeted. If there are still any resources/resource groups you will likely have to remove them by hand. 
+
+[Return to top](#contents)
+
+tool_purge_sd_vaults.py
+
+## tool_purge_sd_vaults.py
+
+Delete key vaults can linger for some time. This tool is part of the autocleanup.py script so it can be automated, but it can also be run standalone. 
+
+Any deleted key vault that does not have purge protection enabled will be permanantly deleted. 
+
+[Return to top](#contents)
