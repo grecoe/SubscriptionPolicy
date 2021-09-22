@@ -4,8 +4,6 @@
 - [Configurations](#configurations)
     - [configuration.json](#configurationjson)
     - [credentials.json](#credentialsjson)
-- [Credentials](#credentials)
-    - See also [credentials.json](#credentialsjson)
 - [Tasks](#tasks)
     - [Identity Tasks](#task_identitypy)
     - [Azure Virtual Machine Tasks](#task_computepy)
@@ -19,6 +17,7 @@
     - [S360 Open Endpoints](#tool_s360_endpointspy)
     - [Flush Subscription](#tool_flushsubpy)
     - [Purge Deleted Azure Key Vaults](#tool_purge_sd_vaultspy)
+
 
 This repo has some utilities useful for managing certain aspects of your Azure Subscriptions. Particularly those that need or want to follow certain policies as we have done internally. 
 
@@ -50,14 +49,6 @@ This is the main configuration for all of the task_*.py files that are used to e
     "storage" : {}
 }
 ```
-
-# Credentials
-
-Each of the tasks or tools listed in this file require some form of Azure CLI login to perform it's tasks. 
-
-If information for a service principal have been entered into the credentials.json file AND the usePrincipal field is set to true, the tasks/tools will attempt to create a login with that principal information. 
-
-Otherwise, the tools/tasks exepct you to have already performed an az login with credentials that will provide you owner level access to the subscriptions you are attempting to work on. 
 
 ### Tasks
 automation and subscriptions are used globally in all tasks. These tell the scripts whether to override settings and which subscriptions to work on respectively. 
