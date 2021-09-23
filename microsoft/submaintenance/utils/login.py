@@ -75,7 +75,6 @@ class AzLoginUtils:
         
         return None
 
-
     @staticmethod
     def logout():
         command = "az logout"
