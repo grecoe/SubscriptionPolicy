@@ -1,4 +1,5 @@
 # SubscriptionPolicy
+<sub>Dan Grecoe is a Microsoft Employee</sub>
 
 ### Contents
 - [Configurations](#configurations)
