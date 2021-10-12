@@ -132,6 +132,14 @@ class AzRolesUtils:
         return None
 
     @staticmethod
+    def get_aad_user_info(principal_id:str):
+        command = "az ad user show --id {}".format(principal_id)
+        raw =  CmdUtils.get_command_output(command.split(' '))
+        if raw:
+            return AzAdUser(raw)
+        return None
+
+    @staticmethod
     def _get_aad_sp_owners(principal_id: str):
         command = "az ad sp owner list --id {}".format(principal_id)
         return CmdUtils.get_command_output(command.split(' '))

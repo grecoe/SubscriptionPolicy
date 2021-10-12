@@ -59,7 +59,29 @@ class AzResourceGroupUtils:
             ]
         )
 
+    @staticmethod
+    def update_group_tags(sub_id: str, group_name: str, set_command:str):
+        return CmdUtils.get_command_output(
+            [
+                "az", 
+                "group", 
+                "update",
+                "--resource-group",
+                group_name, 
+                "--set",
+                set_command,
+                "--subscription", 
+                sub_id
+            ]
+        )
 
+    @staticmethod
+    def get_tag_content(group:dict, tag:str) -> str:
+        return_value = None
+        if "tags" in group and group["tags"]:
+            if tag in group["tags"]:
+                return_value = group["tags"][tag]
+        return return_value
 
     @staticmethod
     def group_exists(sub_id: str, group_name: str):
