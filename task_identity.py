@@ -126,7 +126,7 @@ for task_name in configuration.identity["active_tasks"]:
 
                 if perform_delete:
                     stats["Removed"] += 1
-                    user_assignment.delete()
+                    # user_assignment.delete()
             
             stats["Details"][sub_id] = sorted(stats["Details"][sub_id])
 
