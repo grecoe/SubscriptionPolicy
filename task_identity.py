@@ -45,10 +45,12 @@ except Exception as ex:
 configuration = Configuration(CONFIGURATION_FILE)
 az_identities = AzIdentities()
 
+
 allowed_tasks = [
     "reportassignments",
     "clearuserassignments",
-    "clearinvalidprincipals"]
+    "clearinvalidprincipals"
+]
 
 
 # Validate the minimum on the configuration
@@ -58,6 +60,7 @@ if not hasattr(configuration, "identity"):
     raise Exception("Update configuration.json identity section")
 if not configuration.identity["taskOutputDirectory"]:
     raise Exception("Update configuration.json identity.taskOutputDirectory section")
+
 
 # Create output path for all tasks
 task_output_path = PathUtils.ensure_path(configuration.identity["taskOutputDirectory"])
@@ -74,7 +77,23 @@ for task_name in configuration.identity["active_tasks"]:
 
         for sub_id in configuration.subscriptions:
             role_summary = az_identities.get_role_summary(sub_id)
-            file_path = os.path.join(task_output_path, "{}.json".format(sub_id))
+
+            role_defs = {}
+            for principal in role_summary:
+                for assignment in role_summary[principal]:
+                    if assignment["roleDefinitionName"] not in role_defs:
+                        role_defs[assignment["roleDefinitionName"]] = {}
+
+                    if assignment["principalType"] not in role_defs[assignment["roleDefinitionName"]]:
+                        role_defs[assignment["roleDefinitionName"]][assignment["principalType"]] = 0                         
+                    
+                    role_defs[assignment["roleDefinitionName"]][assignment["principalType"]] += 1
+            
+            file_path = os.path.join(task_output_path, "{}_categories.json".format(sub_id))
+            with open(file_path, "w") as output_file:
+                output_file.writelines(json.dumps(role_defs, indent=4))
+
+            file_path = os.path.join(task_output_path, "{}_all.json".format(sub_id))
             with open(file_path, "w") as output_file:
                 output_file.writelines(json.dumps(role_summary, indent=4))
 
@@ -94,14 +113,22 @@ for task_name in configuration.identity["active_tasks"]:
             if configuration.automation:
                 perform_delete = True
 
+            
             for user_assignment in user_assignments:
                 if sub_id not in stats["Details"]:
                     stats["Details"][sub_id] = []
-                stats["Details"][sub_id].append(user_assignment.principalName)
+                
+                stats["Details"][sub_id].append("{}-{}".format(
+                        user_assignment.principalName,
+                        user_assignment.roleDefinitionName
+                        )
+                )
 
                 if perform_delete:
                     stats["Removed"] += 1
                     user_assignment.delete()
+            
+            stats["Details"][sub_id] = sorted(stats["Details"][sub_id])
 
         file_path = os.path.join(task_output_path, "sub_scoped_users.json")
         with open(file_path, "w") as output_file:
