@@ -1,0 +1,26 @@
+{
+    "subscription" : "c99e2bf3-1777-412b-baba-d823676589c2",
+    "groups" : {
+        "Owner": "MCIGetTestGroup",
+        "Contributor": null, 
+        "Reader": null,
+        "Reader and Data Access": null,
+        "User Access Administrator": null,
+        "Key Vault Administrator": null,
+        "Key Vault Contributor": null,
+        "Key Vault Secrets User": null,
+        "Storage Account Contributor": null,
+        "Storage Blob Data Contributor": null,
+        "Storage Blob Data Owner": null,
+        "Storage Blob Data Reader": null,
+        "Storage Queue Data Contributor": null,
+        "Cosmos DB Account Reader Role": null,
+        "DocumentDB Account Contributor": null,
+        "Azure Service Bus Data Owner": null,
+        "Azure Kubernetes Service RBAC Cluster Admin": null,
+        "Automation Job Operator": null,
+        "AcrPush": null,
+        "AcrPull": null,
+        "Virtual Machine Contributor": null
+    }
+}

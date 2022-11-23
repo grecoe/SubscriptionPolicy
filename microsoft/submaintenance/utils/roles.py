@@ -24,6 +24,14 @@ class AzAdUser:
         self.department = None
         AzAdLoader.load_props(self,props)
 
+class AzAdGroupMember:
+    def __init__(self, props):
+        # objectId, mail, department
+        self.objectId = None
+        self.objectType = None
+        self.userType = None
+        AzAdLoader.load_props(self,props)
+
 class AzRole:
     def __init__(self):
         self.subscription = None
@@ -146,5 +154,22 @@ class AzRolesUtils:
 
     @staticmethod
     def get_aad_group_members(group : str):
-        command = "z ad group member list --group {}".format(group)
+        command = "az ad group member list --group {}".format(group)
+        print("CALLLING", command)
+        return CmdUtils.get_command_output(command.split(' '))
+
+    @staticmethod
+    def add_group_member(group: str, object_id: str):
+        command = "az ad group member add --group {} --member-id {}".format(
+                group,
+                object_id
+        )
+        return CmdUtils.get_command_output(command.split(' '))
+
+    @staticmethod
+    def is_user_group_member(group: str, object_id: str):
+        command = "az ad group member check --group {} --member-id {}".format(
+                group,
+                object_id
+        )
         return CmdUtils.get_command_output(command.split(' '))

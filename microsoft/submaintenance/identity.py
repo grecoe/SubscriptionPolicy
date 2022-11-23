@@ -4,7 +4,9 @@ import typing
 from .utils.csvloader import S360Reader
 from .utils.roles import (
     AzRolesUtils,
-    AzRole
+    AzRole,
+    AzAdUser,
+    AzAdGroupMember
 )
 
 
@@ -88,6 +90,20 @@ class AzIdentities:
 
         return  return_count
 
+    def get_aad_user_info(self, user: str) -> AzAdUser:
+        return AzRolesUtils.get_aad_user_info(user)
+
+    def add_group_member(self, group: str, object_id: str):
+        AzRolesUtils.add_group_member(group, object_id)
+
+    def get_group_members(self, group: str) -> typing.List[AzAdGroupMember]:
+        members = []
+        result = AzRolesUtils.get_aad_group_members(group)
+        if result:
+            for member in result:
+                members.append(AzAdGroupMember(member))
+        return members
+    
     def get_role_summary(self, sub_id:str) -> typing.Dict[str,typing.Dict[str,str]]:
         """Gets the full summary of assignments for the sub 
         
