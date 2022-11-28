@@ -155,7 +155,6 @@ class AzRolesUtils:
     @staticmethod
     def get_aad_group_members(group : str):
         command = "az ad group member list --group {}".format(group)
-        print("CALLLING", command)
         return CmdUtils.get_command_output(command.split(' '))
 
     @staticmethod

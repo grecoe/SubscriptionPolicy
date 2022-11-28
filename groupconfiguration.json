@@ -1,9 +1,23 @@
 {
     "subscription" : "c99e2bf3-1777-412b-baba-d823676589c2",
+    "settings" : {
+        "internal_group" : 0,
+        "external_group" : 1,
+        "external_filter" : "#EXT#"
+    },
     "groups" : {
-        "Owner": "MCIGetTestGroup",
+        "Owner": null,
         "Contributor": null, 
-        "Reader": null,
+        "Reader": [
+            { 
+                "type" : "internal_group",
+                "name" : "MCIReaderTest" 
+            },
+            { 
+                "type" : "external_group",
+                "name" : "MCIExternalReaderTest" 
+            }
+        ],
         "Reader and Data Access": null,
         "User Access Administrator": null,
         "Key Vault Administrator": null,

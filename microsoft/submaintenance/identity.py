@@ -130,7 +130,8 @@ class AzIdentities:
                         {
                             "principalType" : role.principalType,
                             "roleDefinitionName" : role.roleDefinitionName,
-                            "id" : role.id
+                            "id" : role.id,
+                            "scopeType" : role.scope_type
                         }
                     )
 

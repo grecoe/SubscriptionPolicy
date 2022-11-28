@@ -37,6 +37,9 @@ class CmdUtils:
                 result = None
 
         if as_json and result is not None and len(result):
-            return json.loads(result)
+            try:
+                result = json.loads(result)
+            except Exception as ex:
+                print("*** DECODE ERROR - result")
 
         return result
