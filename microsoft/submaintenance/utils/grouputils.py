@@ -22,8 +22,10 @@ class UserAssignment:
                     "scope" : assigment["scopeType"]
                 })
     
-    def supports_role_definition(self, role_def:str) -> bool:
+    def supports_role_definition(self, role_def:str, scopes: typing.List[str]) -> bool:
         support = [x for x in self.assignments if x["role"].lower() == role_def.lower()]
+        if scopes and len(support):
+            support = [x for x in support if x["scope"].lower() in scopes]
         return len(support) > 0
 
     def get_oid(self) -> str:
@@ -84,9 +86,16 @@ class Group:
         """.format(self.name, self.type.name, members)
     
 class Role:
-    def __init__(self, az_identities:AzIdentities, name:str, filter:str,  groups:typing.List[typing.Dict[str, object]]):
+    def __init__(
+            self, 
+            az_identities:AzIdentities, 
+            name:str, 
+            filter:str,
+            scopes: typing.List[str],  
+            groups:typing.List[typing.Dict[str, object]]):
         self.az_identities = az_identities
         self.name = name
+        self.scopes = [x.lower() for x in scopes]
         self.groups:typing.List[Group] = []
         self.external_filter = filter
 
@@ -132,8 +141,6 @@ class Role:
                     active_group.type.name)
                 )
 
-
-    
     def is_filtered(self):
         filtered = False
         if len(self.groups) > 1:
@@ -180,7 +187,8 @@ class GroupConfiguration:
                             az_identities,
                             role, 
                             self.settings["external_filter"],
-                            configuration["groups"][role]
+                            configuration["groups"][role]["scopes"],
+                            configuration["groups"][role]["groups"]
                             )
                         )
 

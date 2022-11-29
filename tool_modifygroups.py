@@ -63,9 +63,27 @@ sub_role_summary = az_identities.get_role_summary(group_config.subscription)
 for rs in sub_role_summary:
     user_assignments.append(UserAssignment(az_identities, rs, sub_role_summary[rs]))
 
-    
+
+
 print("Separate users from all assignements")
 users = [x for x in user_assignments if x.type == "User"]
+
+# DEBUG
+"""
+roles = {}
+for user in users:
+    for assignment in user.assignments:
+        if assignment["role"] not in roles:
+            roles[assignment["role"]] = {}
+        
+        if assignment["scope"] not in roles[assignment["role"]]:
+            roles[assignment["role"]][assignment["scope"]] = 0
+        roles[assignment["role"]][assignment["scope"]] += 1
+with open("assignments_by_scope.json", "w") as output_file:
+    output_file.writelines(json.dumps(roles, indent=4))
+quit()
+"""
+# DEBUG
 
 # For each role, get the users that might be associated with it
 failed_loads: typing.Dict[str, typing.List[UserAssignment]] = {}
@@ -83,11 +101,12 @@ for role in group_config.roles:
         print(role.name, ": {} of {}".format(current, len(users)))
         current += 1
 
-        if user.supports_role_definition(role.name):
+        if user.supports_role_definition(role.name, role.scopes):
             if user.get_oid() is None:
                 failed_users.append(user)
             else:
-                role.add_user_to_role_group(user)
+                # role.add_user_to_role_group(user)
+                print("Add {} to {} with {}".format(user.name, role.name, role.scopes))
                 total_adds += 1
 
     failed_users = [x.name for x in failed_users]

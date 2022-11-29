@@ -6,18 +6,21 @@
         "external_filter" : "#EXT#"
     },
     "groups" : {
-        "Owner": null,
+        "Reader": null,
         "Contributor": null, 
-        "Reader": [
-            { 
-                "type" : "internal_group",
-                "name" : "MCIReaderTest" 
-            },
-            { 
-                "type" : "external_group",
-                "name" : "MCIExternalReaderTest" 
-            }
-        ],
+        "Owner": {
+            "scopes" : ["Subscription"],
+            "groups" : [
+                { 
+                    "type" : "internal_group",
+                    "name" : "MCIReaderTest" 
+                },
+                { 
+                    "type" : "external_group",
+                    "name" : "MCIExternalReaderTest" 
+                }
+            ]
+        },
         "Reader and Data Access": null,
         "User Access Administrator": null,
         "Key Vault Administrator": null,
